@@ -1,4 +1,4 @@
-﻿# <img width="748" height="215" alt="logo" src="https://github.com/user-attachments/assets/7a8f5a75-0348-46e5-93ee-1ab02c00c881" />
+# <img width="748" height="215" alt="logo" src="https://github.com/user-attachments/assets/7a8f5a75-0348-46e5-93ee-1ab02c00c881" />
 
 **uLayout** is simple UI layout system designed as a drop-in replacement for Unity's `VerticalLayoutGroup` and `HorizontalLayoutGroup`, implementing a core subset of the *flexbox* spec from CSS. The system operates purely on `RectTransform`s, meaning full compatibility with native uGUI components like `Image`, `RectMask2D`, etc.
 
@@ -27,11 +27,15 @@ Further explanation and examples can be found in the sample scene at `Examples/L
 ### Text Support
 uLayout also supports TextMeshPro `TMP_Text` objects, using the `LayoutText` component. This also derives from `LayoutItem`, offering the same sizing options. This allows text objects to resize depending on contents and font size. Resizing text is fairly expensive, so you generally want to avoid resizing text as much as possible during runtime.
 
+### Floating Layout (`OverflowsLineCross`)
+The `OverflowsLineCross` toggle on `LayoutItem` or `Layout` enables floating-item behavior in wrap mode under a Row layout. When active, the item does not inflate the row's height — it keeps its natural size but dynamically blocks the columns it occupies in subsequent rows, allowing other items to flow around it (similar to a floating image in a word processor). The blocking is height-aware: once the item's vertical span ends, the previously blocked columns are freed and the following rows can fill in that space normally.
+
 ---
 
 ## Component Settings
 ### LayoutItem
 - **Ignore Layout** (`bool`): Whether to exclude this element from layout positioning
+- **Overflows Line Cross** (`bool`): When enabled in wrap mode, this item retains its natural cross size without expanding the row height, and blocks columns in subsequent rows (floating layout behavior).
 - **Size Mode**: Sets the rect sizing mode for each axis. "**FitContent**" has no effect (use derived classes below)
   - **x** (`SizingMode`)
   - **y** (`SizingMode`)

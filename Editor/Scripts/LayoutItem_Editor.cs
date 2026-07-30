@@ -27,6 +27,7 @@ namespace Poke.UI
         private SerializedProperty _log;
         private SerializedProperty _ignoreLayout;
         private SerializedProperty _sizing;
+        //private SerializedProperty _overflowsLineCross;
 
         protected virtual void OnEnable() {
             _item = target as LayoutItem;
@@ -34,27 +35,43 @@ namespace Poke.UI
             _log = serializedObject.FindProperty("m_log");
             _ignoreLayout = serializedObject.FindProperty("m_ignoreLayout");
             _sizing = serializedObject.FindProperty("m_sizing");
+            //_overflowsLineCross = serializedObject.FindProperty("m_overflowsLineCross");
         }
 
         public override void OnInspectorGUI() {
             if(!_item)
                 return;
-            
+
             EditorGUILayout.PropertyField(_log);
             EditorGUILayout.PropertyField(_ignoreLayout);
-            
+
             // disable sizing options if ignoreLayout is true
             GUI.enabled = !_ignoreLayout.boolValue;
             EditorGUILayout.PropertyField(_sizing);
+
+            //var sizeX = (SizingMode)_sizing.FindPropertyRelative("x").enumValueIndex;
+            //var sizeY = (SizingMode)_sizing.FindPropertyRelative("y").enumValueIndex;
+            //bool hasDeterminedSize = sizeX == SizingMode.Fixed || sizeX == SizingMode.Grow
+            //                      || sizeY == SizingMode.Fixed || sizeY == SizingMode.Grow;
+
+            //EditorGUILayout.PropertyField(_overflowsLineCross);
+
+
+            //if (hasDeterminedSize)
+            //{
+            //    EditorGUILayout.PropertyField(_overflowsLineCross);
+            //}
+
+
             GUI.enabled = true;
 
             if(serializedObject.hasModifiedProperties) {
                 serializedObject.ApplyModifiedProperties();
-                
+
                 foreach(var obj in serializedObject.targetObjects) {
                     (obj as LayoutItem).SetDirty();
                 }
-                
+
                 EditorApplication.QueuePlayerLoopUpdate();
             }
         }

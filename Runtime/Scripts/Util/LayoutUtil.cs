@@ -51,7 +51,7 @@ namespace Poke.UI
         }
     }
     
-    [System.Serializable]
+    [Serializable]
     public struct Margins : IEquatable<Margins>
     {
         public float top, bottom, left, right;
@@ -74,5 +74,11 @@ namespace Poke.UI
         FitContent,
         Fixed,
         Grow,
+    }
+
+    public enum WrapMode
+    {
+        NoWrap = 0,
+        Wrap   = 1,
     }
 }

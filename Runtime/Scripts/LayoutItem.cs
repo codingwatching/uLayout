@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (c) 2026 Alex Howe
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13,7 +13,6 @@
 */
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Poke.UI
@@ -29,6 +28,10 @@ namespace Poke.UI
         [Header("Layout Item")]
         [SerializeField] protected bool m_ignoreLayout = false;
         [SerializeField] protected SizeModes m_sizing;
+        // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
+        // its natural cross size but does not inflate the line, and blocks columns in subsequent
+        // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
+        [SerializeField] protected bool m_overflowsLineCross = false;
 
         protected float _minWidth;
         protected float _preferredWidth;
@@ -45,18 +48,25 @@ namespace Poke.UI
         public float preferredHeight => _preferredHeight;
         public float flexibleHeight => _flexibleHeight;
         public int layoutPriority => _layoutPriority;
-        
-        public bool IgnoreLayout {
+
+        public bool IgnoreLayout
+        {
             get => m_ignoreLayout;
             set => m_ignoreLayout = value;
         }
         public RectTransform Rect => _rect;
-        public DrivenTransformProperties TrackerProps {
+        public DrivenTransformProperties TrackerProps
+        {
             get => _trackerProps;
             set => _trackerProps = value;
         }
         public SizeModes SizeMode => m_sizing;
-        
+        public bool OverflowsLineCross
+        {
+            get => m_overflowsLineCross;
+            set { m_overflowsLineCross = value; SetDirty(); }
+        }
+
         protected RectTransform _rect;
         protected DrivenRectTransformTracker _tracker;
         protected DrivenTransformProperties _trackerProps;
@@ -64,9 +74,9 @@ namespace Poke.UI
         protected Layout _parent;
         protected bool _dirty = true;
         protected int _frame;
-        
+
         private Vector2 _parentSize;
-        
+
         [Serializable]
         public struct SizeModes
         {
@@ -76,11 +86,9 @@ namespace Poke.UI
 
         #region LayoutItem MonoBehavior
         protected virtual void Awake() {
-            Log("awake");
-            
             _rect = GetComponent<RectTransform>();
             _tracker = new DrivenRectTransformTracker();
-            
+
             _parentSize = _parentRect ? _parentRect.rect.size : default;
         }
 
@@ -97,16 +105,16 @@ namespace Poke.UI
         public virtual void Update() {
             //Log("update");
             _frame = Time.frameCount;
-            
-            #if UNITY_EDITOR
+
+#if UNITY_EDITOR
             _tracker.Clear();
             _trackerProps = DrivenTransformProperties.None;
-            
+
             SetDrivenProperties();
-            
+
             _tracker.Add(this, _rect, _trackerProps);
-            #endif
-            
+#endif
+
             // Do grow sizing here if parent is not a Layout
             if(!_parent && _parentRect) {
                 // only update size if parent size has changed
@@ -132,9 +140,8 @@ namespace Poke.UI
             if((m_sizing.y == SizingMode.FitContent && transform.childCount > 0) || m_sizing.y == SizingMode.Grow)
                 _trackerProps |= DrivenTransformProperties.SizeDeltaY;
 
-            if(_parent && !m_ignoreLayout) {
+            if(_parent && !m_ignoreLayout) 
                 _trackerProps |= DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.Anchors;
-            }
         }
 
         public virtual void SetDirty() {
@@ -147,6 +154,7 @@ namespace Poke.UI
         public virtual void CalculateLayoutInputHorizontal() {
             Log("CalculateLayoutInputHorizontal");
         }
+
         public virtual void CalculateLayoutInputVertical() {
             Log("CalculateLayoutInputVertical");
         }
