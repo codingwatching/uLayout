@@ -32,14 +32,13 @@ namespace Poke.UI
 #endif
         public event Action OnLayoutChanged;
         
-        [Header("Layout")]
         [SerializeField] private Margins            m_padding;
         [SerializeField] private LayoutDirection    m_direction;
         [SerializeField] private Justification      m_justifyContent;
         [SerializeField] private Alignment          m_alignContent;
         [SerializeField] private float              m_innerSpacing;
         [SerializeField] private bool               m_ignoreChildScale;
-        [SerializeField] private WrapMode           m_wrap;
+        [SerializeField] private bool               m_wrap;
         [SerializeField] private float              m_lineSpacing;
 
         #region Properties
@@ -97,7 +96,7 @@ namespace Poke.UI
                 SetDirty();
             }
         }
-        public WrapMode Wrap
+        public bool Wrap
         {
             get => m_wrap;
             set
@@ -343,7 +342,7 @@ namespace Poke.UI
                     }
 
                     // WRAP: pack lines and override _contentSize.x with line-aware value
-                    if(m_wrap == WrapMode.Wrap) {
+                    if(m_wrap) {
                         bool isRow = IsRowDirection();
                         PackLines(primaryIsX: isRow);
                         if(isRow) {
@@ -446,7 +445,7 @@ namespace Poke.UI
                     }
 
                     // WRAP: recalculate line cross size with Y and override _contentSize.y
-                    if(m_wrap == WrapMode.Wrap && _lines.Count > 0) {
+                    if(m_wrap && _lines.Count > 0) {
                         bool isRow = IsRowDirection();
                         if(isRow) {
                             // Row+Wrap: cross axis = y; refresh line crossSize.
@@ -504,7 +503,7 @@ namespace Poke.UI
             if(_dirty) {
                 Log("SetLayoutHorizontal");
                 
-                if(m_wrap == WrapMode.Wrap && _lines.Count > 0) {
+                if(m_wrap && _lines.Count > 0) {
                     GrowChildrenWrapped(RectTransform.Axis.Horizontal);
                     HorizontalLayoutWrapped();
                 }
@@ -519,7 +518,7 @@ namespace Poke.UI
             if(_dirty) {
                 Log("SetLayoutVertical");
                 
-                if(m_wrap == WrapMode.Wrap && _lines.Count > 0) {
+                if(m_wrap && _lines.Count > 0) {
                     GrowChildrenWrapped(RectTransform.Axis.Vertical);
                     VerticalLayoutWrapped();
                 }
@@ -556,7 +555,7 @@ namespace Poke.UI
             if(_children.Count == 0) return;
 
             SizingMode primarySizing = primaryIsX ? m_sizing.x : m_sizing.y;
-            bool effectiveWrap = m_wrap == WrapMode.Wrap && primarySizing != SizingMode.FitContent;
+            bool effectiveWrap = m_wrap && primarySizing != SizingMode.FitContent;
 
             if(!effectiveWrap) {
                 _lines.Add(new LineInfo { firstChildIdx = 0, lastChildIdx = _children.Count });
@@ -645,7 +644,7 @@ namespace Poke.UI
 
             // For row direction, cross-grow items affect the packing of subsequent rows.
             // Here, we re-partition the lines to prevent items from falling on blocks and wrap if they overflow.
-            if(primaryIsX && m_wrap == WrapMode.Wrap) {
+            if(primaryIsX && m_wrap) {
                 RepackForCrossGrowBlocks();
             }
         }

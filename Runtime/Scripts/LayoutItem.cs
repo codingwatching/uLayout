@@ -33,9 +33,9 @@ namespace Poke.UI
         [SerializeField] protected float m_maxWidth;
         [SerializeField] protected float m_maxHeight;
         [Tooltip("The relative \"weight\" of this element in the horizontal layout")]
-        [SerializeField] protected float m_flexWidth;
+        [SerializeField] protected float m_flexWidth = 1;
         [Tooltip("The relative \"weight\" of this element in the vertical layout")]
-        [SerializeField] protected float m_flexHeight;
+        [SerializeField] protected float m_flexHeight = 1;
         // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
         // its natural cross size but does not inflate the line, and blocks columns in subsequent
         // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
