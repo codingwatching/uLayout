@@ -27,27 +27,31 @@ namespace Poke.UI
         
         [Header("Layout Item")]
         [SerializeField] protected bool m_ignoreLayout = false;
-        [SerializeField] protected float m_minWidth;
-        [SerializeField] protected float m_preferredWidth;
-        [SerializeField] protected float m_flexibleWidth;
-        [SerializeField] protected float m_minHeight;
-        [SerializeField] protected float m_preferredHeight;
-        [SerializeField] protected float m_flexibleHeight;
-        [SerializeField] protected int m_layoutPriority;
         [SerializeField] protected SizeModes m_sizing;
+        [SerializeField] protected float m_minWidth;
+        [SerializeField] protected float m_minHeight;
+        [SerializeField] protected float m_maxWidth;
+        [SerializeField] protected float m_maxHeight;
+        [Tooltip("The relative \"weight\" of this element in the horizontal layout")]
+        [SerializeField] protected float m_flexWidth;
+        [Tooltip("The relative \"weight\" of this element in the vertical layout")]
+        [SerializeField] protected float m_flexHeight;
         // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
         // its natural cross size but does not inflate the line, and blocks columns in subsequent
         // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
         [SerializeField] protected bool m_overflowsCrossLine = false;
         
         public float minWidth => m_minWidth;
-        public float preferredWidth => m_preferredWidth;
-        public float flexibleWidth => m_flexibleWidth;
         public float minHeight => m_minHeight;
-        public float preferredHeight => m_preferredHeight;
-        public float flexibleHeight => m_flexibleHeight;
-        public int layoutPriority => m_layoutPriority;
+        public float flexibleWidth => m_flexWidth; // relative "weight" of this item in the horizontal layout
+        public float flexibleHeight => m_flexHeight; // relative "weight" of this item in the vertical layout
+        public float preferredWidth => m_maxWidth;
+        public float preferredHeight => m_maxHeight;
+        public int layoutPriority => _layoutPriority; // useless in uLayout (bc only one UL component per object)
 
+        private float _preferredWidth, _preferredHeight;
+        private int _layoutPriority;
+        
         public bool IgnoreLayout
         {
             get => m_ignoreLayout;

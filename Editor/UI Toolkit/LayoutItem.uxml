@@ -1,0 +1,37 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/uLayout/Editor/UI%20Toolkit/ulayout.uss?fileID=7433441132597879392&amp;guid=4b06b7a5f630e34479f26b83ea4e5859&amp;type=3#ulayout"/>
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Toggle label="Log" name="LogField"/>
+        <ui:VisualElement name="PositioningContainer" class="section-container">
+            <ui:Label text="Positioning" class="section-header"/>
+            <ui:Toggle label="Ignore Layout" name="IgnoreLayoutField"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="SizingContainer" class="section-container">
+            <ui:Label text="Sizing" class="section-header"/>
+            <ui:VisualElement name="SizingColumns" style="flex-grow: 0; flex-direction: row; background-color: rgba(0, 0, 0, 0); margin-bottom: 0; padding-bottom: 4px; margin-top: 0; padding-top: 4px; margin-right: 3px; margin-left: 0;">
+                <ui:VisualElement name="LabelsContainer" style="flex-grow: 0; min-width: 44px; padding-left: 8px; padding-right: 8px;">
+                    <ui:Label text=" " name="Spacer" selectable="true" focusable="true" style="margin-bottom: 3px;"/>
+                    <ui:Label text="Mode" name="ModeLabel" class="sizing-label" style="margin-top: 3px; margin-bottom: 3px;"/>
+                    <ui:Label text="Min" name="MinLabel" class="sizing-label" style="margin-top: 3px; margin-bottom: 3px;"/>
+                    <ui:Label text="Max" name="MaxLabel" class="sizing-label"/>
+                    <ui:Label text="Flex" name="FlexLabel" class="sizing-label"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="WidthContainer" style="flex-grow: 1; padding-right: 4px;">
+                    <ui:Label text="Width" name="WidthLabel" style="margin-bottom: 3px;"/>
+                    <ui:EnumField label="" value="FitContent" type="Poke.UI.SizingMode, uLayout" name="SizeModeX" style="margin-left: 0; margin-right: 0;"/>
+                    <ui:FloatField label="" value="0" name="MaxWidthField"/>
+                    <ui:FloatField label="" value="0" name="MinWidthField"/>
+                    <ui:IntegerField label="" value="1" name="FlexWidthField"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="HeightContainer" style="flex-grow: 1; padding-left: 4px;">
+                    <ui:Label text="Height" name="HeightLabel" style="margin-bottom: 3px;"/>
+                    <ui:EnumField label="" value="FitContent" type="Poke.UI.SizingMode, uLayout" name="SizeModeY" style="margin-left: 0; margin-right: 0;"/>
+                    <ui:FloatField label="" value="0" name="MinHeightField"/>
+                    <ui:FloatField label="" value="0" name="MaxHeightField"/>
+                    <ui:IntegerField label="" value="1" name="FlexHeightField"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Toggle label="Cross-line Overflow" style="margin-top: 3px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

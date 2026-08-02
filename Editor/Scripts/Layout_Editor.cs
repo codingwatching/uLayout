@@ -13,6 +13,7 @@
 */
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Poke.UI
 {
@@ -49,6 +50,13 @@ namespace Poke.UI
             _sizing = serializedObject.FindProperty("m_sizing");
         }
 
+#if UNITY_6000_0_OR_NEWER
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = base.CreateInspectorGUI();
+
+            return root;
+        }
+#else
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
 
@@ -100,5 +108,6 @@ namespace Poke.UI
                 EditorApplication.QueuePlayerLoopUpdate();
             }
         }
+#endif
     }
 }

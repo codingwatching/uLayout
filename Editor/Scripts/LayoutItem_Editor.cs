@@ -12,7 +12,9 @@
     copies or substantial portions of the Software.
 */
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Poke.UI
 {
@@ -37,7 +39,17 @@ namespace Poke.UI
             _sizing = serializedObject.FindProperty("m_sizing");
             _overflowsLineCross = serializedObject.FindProperty("m_overflowsCrossLine");
         }
-
+#if UNITY_6000_0_OR_NEWER
+        public VisualTreeAsset tree;
+        
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = tree.CloneTree();
+            
+            
+            
+            return root;
+        }
+#else
         public override void OnInspectorGUI() {
             if(!_item)
                 return;
@@ -62,5 +74,6 @@ namespace Poke.UI
                 EditorApplication.QueuePlayerLoopUpdate();
             }
         }
+#endif
     }
 }
