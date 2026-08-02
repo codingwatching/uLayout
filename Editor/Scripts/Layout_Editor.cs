@@ -32,7 +32,6 @@ namespace Poke.UI
         private SerializedProperty _wrap;
         private SerializedProperty _lineSpacing;
         private SerializedProperty _sizing;
-        private SerializedProperty _overflowsLineCross;
 
 
         protected override void OnEnable() {
@@ -48,8 +47,6 @@ namespace Poke.UI
             _wrap = serializedObject.FindProperty("m_wrap");
             _lineSpacing = serializedObject.FindProperty("m_lineSpacing");
             _sizing = serializedObject.FindProperty("m_sizing");
-            _overflowsLineCross = serializedObject.FindProperty("m_overflowsLineCross");
-
         }
 
         public override void OnInspectorGUI() {
@@ -62,7 +59,6 @@ namespace Poke.UI
             EditorGUILayout.PropertyField(_direction);
             EditorGUILayout.PropertyField(_justifyContent);
             EditorGUILayout.PropertyField(_alignContent);
-            EditorGUILayout.PropertyField(_overflowsLineCross);
 
             if((Layout.Justification)_justifyContent.enumValueFlag == Layout.Justification.SpaceBetween) {
                 GUI.enabled = false;
@@ -70,17 +66,17 @@ namespace Poke.UI
             EditorGUILayout.PropertyField(_innerSpacing);
             GUI.enabled = true;
 
+            EditorGUILayout.PropertyField(_ignoreChildScale);
+            
             // _ignoreChildScale, _wrap and _lineSpacing are only relevant when at least
             // one axis has a determined size (Fixed or Grow). When both axes are FitContent
             // the container shrinks to its children and these settings have no effect.
-            var sizeX = (SizingMode)_sizing.FindPropertyRelative("x").enumValueIndex;
-            var sizeY = (SizingMode)_sizing.FindPropertyRelative("y").enumValueIndex;
+            SizingMode sizeX = (SizingMode)_sizing.FindPropertyRelative("x").enumValueIndex;
+            SizingMode sizeY = (SizingMode)_sizing.FindPropertyRelative("y").enumValueIndex;
             bool hasDeterminedSize = sizeX == SizingMode.Fixed || sizeX == SizingMode.Grow
                                   || sizeY == SizingMode.Fixed || sizeY == SizingMode.Grow;
 
             if(hasDeterminedSize) {
-                EditorGUILayout.PropertyField(_ignoreChildScale);
-
                 EditorGUILayout.PropertyField(_wrap);
                 if((WrapMode)_wrap.enumValueIndex == WrapMode.Wrap) {
                     EditorGUILayout.PropertyField(_lineSpacing);

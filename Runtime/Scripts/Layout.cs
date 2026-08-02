@@ -127,7 +127,6 @@ namespace Poke.UI
         private int                         _ignoreCount;
         private Vector2                     _lastSize;
         private readonly List<LineInfo>     _lines = new();
-        private readonly Vector3[]          _rectCorners = new Vector3[4];
 
         #region TypeDef
         public enum Justification
@@ -257,8 +256,8 @@ namespace Poke.UI
 
             _lastSize = _rect.rect.size;
         }
-
-        private void OnDrawGizmosSelected() {
+        
+        protected override void OnDrawGizmosSelected() {
             _rect.GetWorldCorners(_rectCorners);
 
             Matrix4x4 ltw = _rect.localToWorldMatrix;

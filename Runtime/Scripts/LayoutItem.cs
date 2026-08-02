@@ -27,27 +27,26 @@ namespace Poke.UI
         
         [Header("Layout Item")]
         [SerializeField] protected bool m_ignoreLayout = false;
+        [SerializeField] protected float m_minWidth;
+        [SerializeField] protected float m_preferredWidth;
+        [SerializeField] protected float m_flexibleWidth;
+        [SerializeField] protected float m_minHeight;
+        [SerializeField] protected float m_preferredHeight;
+        [SerializeField] protected float m_flexibleHeight;
+        [SerializeField] protected int m_layoutPriority;
         [SerializeField] protected SizeModes m_sizing;
         // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
         // its natural cross size but does not inflate the line, and blocks columns in subsequent
         // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
-        [SerializeField] protected bool m_overflowsLineCross = false;
-
-        protected float _minWidth;
-        protected float _preferredWidth;
-        protected float _flexibleWidth;
-        protected float _minHeight;
-        protected float _preferredHeight;
-        protected float _flexibleHeight;
-        protected int _layoutPriority;
-
-        public float minWidth => _minWidth;
-        public float preferredWidth => _preferredWidth;
-        public float flexibleWidth => _flexibleWidth;
-        public float minHeight => _minHeight;
-        public float preferredHeight => _preferredHeight;
-        public float flexibleHeight => _flexibleHeight;
-        public int layoutPriority => _layoutPriority;
+        [SerializeField] protected bool m_overflowsCrossLine = false;
+        
+        public float minWidth => m_minWidth;
+        public float preferredWidth => m_preferredWidth;
+        public float flexibleWidth => m_flexibleWidth;
+        public float minHeight => m_minHeight;
+        public float preferredHeight => m_preferredHeight;
+        public float flexibleHeight => m_flexibleHeight;
+        public int layoutPriority => m_layoutPriority;
 
         public bool IgnoreLayout
         {
@@ -63,8 +62,8 @@ namespace Poke.UI
         public SizeModes SizeMode => m_sizing;
         public bool OverflowsLineCross
         {
-            get => m_overflowsLineCross;
-            set { m_overflowsLineCross = value; SetDirty(); }
+            get => m_overflowsCrossLine;
+            set { m_overflowsCrossLine = value; SetDirty(); }
         }
 
         protected RectTransform _rect;
@@ -74,6 +73,7 @@ namespace Poke.UI
         protected Layout _parent;
         protected bool _dirty = true;
         protected int _frame;
+        protected readonly Vector3[] _rectCorners = new Vector3[4];
 
         private Vector2 _parentSize;
 
@@ -127,6 +127,17 @@ namespace Poke.UI
                     _parentSize = _parentSize.SetY(_parentRect.rect.size.y);
                 }
             }
+        }
+        
+        protected virtual void OnDrawGizmosSelected() {
+            _rect.GetWorldCorners(_rectCorners);
+            
+            foreach(Vector3 v in _rectCorners) {
+                LayoutUtil.DrawCenteredDebugBox(v, 0.15f, 0.15f, Color.red);
+            }
+
+            Rect r = new Rect(_rectCorners[0], _rectCorners[2] - _rectCorners[0]);
+            LayoutUtil.DrawDebugBox(r, _rect.position.z, Color.white);
         }
         #endregion
 
