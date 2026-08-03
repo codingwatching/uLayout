@@ -40,6 +40,7 @@ namespace Poke.UI
         private SerializedProperty _maxHeight;
         private SerializedProperty _flexWidth;
         private SerializedProperty _flexHieght;
+        private SerializedProperty _margins;
         private SerializedProperty _overflowsCrossLine;
 
         protected virtual void OnEnable() {
@@ -56,6 +57,7 @@ namespace Poke.UI
             _maxHeight = serializedObject.FindProperty("m_maxHeight");
             _flexWidth = serializedObject.FindProperty("m_flexWidth");
             _flexHieght = serializedObject.FindProperty("m_flexHeight");
+            _margins = serializedObject.FindProperty("m_margins");
             _overflowsCrossLine = serializedObject.FindProperty("m_overflowsCrossLine");
         }
         
@@ -78,17 +80,43 @@ namespace Poke.UI
             EnumField sizingY = root.Q<EnumField>("SizeModeY");
             sizingY.BindProperty(_sizingY);
 
+            Label minLabel = root.Q<Label>("MinLabel");
+            minLabel.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed || (SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            minLabel.TrackPropertyValue(_sizing, prop => {
+                minLabel.SetEnabled(
+                    (SizingMode)prop.FindPropertyRelative("x").enumValueIndex != SizingMode.Fixed ||
+                    (SizingMode)prop.FindPropertyRelative("y").enumValueIndex != SizingMode.Fixed
+                );
+            });
+            
             FloatField minWidth = root.Q<FloatField>("MinWidthField");
             minWidth.BindProperty(_minWidth);
+            minWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
+            minWidth.TrackPropertyValue(_sizingX, prop => minWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
             
-            FloatField minHeigth = root.Q<FloatField>("MinHeightField");
-            minHeigth.BindProperty(_minHeight);
+            FloatField minHeight = root.Q<FloatField>("MinHeightField");
+            minHeight.BindProperty(_minHeight);
+            minHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            minHeight.TrackPropertyValue(_sizingY, prop => minHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
+            
+            Label maxLabel = root.Q<Label>("MaxLabel");
+            maxLabel.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed || (SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            maxLabel.TrackPropertyValue(_sizing, prop => {
+                maxLabel.SetEnabled(
+                    (SizingMode)prop.FindPropertyRelative("x").enumValueIndex != SizingMode.Fixed ||
+                    (SizingMode)prop.FindPropertyRelative("y").enumValueIndex != SizingMode.Fixed
+                );
+            });
             
             FloatField maxWidth = root.Q<FloatField>("MaxWidthField");
             maxWidth.BindProperty(_maxWidth);
+            maxWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
+            maxWidth.TrackPropertyValue(_sizingX, prop => maxWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
             
             FloatField maxHeight = root.Q<FloatField>("MaxHeightField");
             maxHeight.BindProperty(_maxHeight);
+            maxHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            maxHeight.TrackPropertyValue(_sizingY, prop => maxHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
 
             Label flexLabel = root.Q<Label>("FlexLabel");
             flexLabel.SetEnabled((SizingMode)_sizingX.enumValueIndex == SizingMode.Grow || (SizingMode)_sizingY.enumValueIndex == SizingMode.Grow);
@@ -101,16 +129,15 @@ namespace Poke.UI
             FloatField flexWidth = root.Q<FloatField>("FlexWidthField");
             flexWidth.BindProperty(_flexWidth);
             flexWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex == SizingMode.Grow);
-            flexWidth.TrackPropertyValue(_sizingX, prop => {
-                flexWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex == SizingMode.Grow);
-            });
+            flexWidth.TrackPropertyValue(_sizingX, prop => flexWidth.SetEnabled((SizingMode)prop.enumValueIndex == SizingMode.Grow));
             
             FloatField flexHeight = root.Q<FloatField>("FlexHeightField");
             flexHeight.BindProperty(_flexHieght);
             flexHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex == SizingMode.Grow);
-            flexHeight.TrackPropertyValue(_sizingY, prop => {
-                flexWidth.SetEnabled((SizingMode)prop.enumValueIndex == SizingMode.Grow);
-            });
+            flexHeight.TrackPropertyValue(_sizingY, prop => flexWidth.SetEnabled((SizingMode)prop.enumValueIndex == SizingMode.Grow));
+
+            PropertyField margins = root.Q<PropertyField>("MarginsField");
+            margins.BindProperty(_margins);
             
             Toggle overflow = root.Q<Toggle>("CrossLineField");
             overflow.BindProperty(_overflowsCrossLine);

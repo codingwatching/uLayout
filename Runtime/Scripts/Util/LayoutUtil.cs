@@ -63,6 +63,14 @@ namespace Poke.UI
         public override bool Equals(object obj) {
             return obj is Margins other && Equals(other);
         }
+        
+        public static bool operator ==(Margins left, Margins right) {
+            return left.Equals(right);
+        }
+        
+        public static bool operator !=(Margins left, Margins right) {
+            return !left.Equals(right);
+        }
 
         public override int GetHashCode() {
             return HashCode.Combine(top, bottom, left, right);
@@ -74,11 +82,5 @@ namespace Poke.UI
         FitContent,
         Fixed,
         Grow,
-    }
-
-    public enum WrapMode
-    {
-        NoWrap = 0,
-        Wrap   = 1,
     }
 }

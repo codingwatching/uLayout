@@ -36,6 +36,7 @@ namespace Poke.UI
         [SerializeField] protected float m_flexWidth = 1;
         [Tooltip("The relative \"weight\" of this element in the vertical layout")]
         [SerializeField] protected float m_flexHeight = 1;
+        [SerializeField] protected Margins m_margins;
         // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
         // its natural cross size but does not inflate the line, and blocks columns in subsequent
         // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
@@ -52,40 +53,56 @@ namespace Poke.UI
         private float _preferredWidth, _preferredHeight;
         private int _layoutPriority;
         
+#region Properties
         public bool IgnoreLayout
         {
             get => m_ignoreLayout;
-            set => m_ignoreLayout = value;
+            set {
+                m_ignoreLayout = value;
+                SetDirty();
+            }
+        }
+        public Margins Margins
+        {
+            get => m_margins;
+            set {
+                m_margins = value;
+                SetDirty();
+            }
         }
         public RectTransform Rect => _rect;
-        public DrivenTransformProperties TrackerProps
-        {
-            get => _trackerProps;
-            set => _trackerProps = value;
-        }
-        public SizeModes SizeMode => m_sizing;
+        public DrivenTransformProperties TrackerProps => _trackerProps;
+        public SizeModes Sizing => m_sizing;
         public bool OverflowsLineCross
         {
             get => m_overflowsCrossLine;
-            set { m_overflowsCrossLine = value; SetDirty(); }
+            set {
+                m_overflowsCrossLine = value;
+                SetDirty();
+            }
         }
-
+#endregion
+        
         protected RectTransform _rect;
         protected DrivenRectTransformTracker _tracker;
         protected DrivenTransformProperties _trackerProps;
-        protected RectTransform _parentRect;
         protected Layout _parent;
         protected bool _dirty = true;
         protected int _frame;
         protected readonly Vector3[] _rectCorners = new Vector3[4];
 
+        private RectTransform _parentRect;
         private Vector2 _parentSize;
 
         [Serializable]
-        public struct SizeModes
+        public struct SizeModes : IEquatable<SizeModes>
         {
             public SizingMode x;
             public SizingMode y;
+            
+            public bool Equals(SizeModes other) {
+                return x == other.x && y == other.y;
+            }
         }
 
         #region LayoutItem MonoBehavior
@@ -135,6 +152,8 @@ namespace Poke.UI
         
         protected virtual void OnDrawGizmosSelected() {
             _rect.GetWorldCorners(_rectCorners);
+
+            Matrix4x4 ltw = _rect.localToWorldMatrix;
             
             foreach(Vector3 v in _rectCorners) {
                 LayoutUtil.DrawCenteredDebugBox(v, 0.15f, 0.15f, Color.red);
@@ -142,6 +161,12 @@ namespace Poke.UI
 
             Rect r = new Rect(_rectCorners[0], _rectCorners[2] - _rectCorners[0]);
             LayoutUtil.DrawDebugBox(r, _rect.position.z, Color.white);
+
+            if(m_margins.top != 0 || m_margins.bottom != 0 || m_margins.left != 0 || m_margins.right != 0) {
+                r.position -= (Vector2)(ltw * new Vector2(m_margins.left, m_margins.bottom));
+                r.size += (Vector2)(ltw * new Vector2(m_margins.left + m_margins.right, m_margins.top + m_margins.bottom));
+                LayoutUtil.DrawDebugBox(r, _rect.position.z, Color.orange);
+            }
         }
         #endregion
 
