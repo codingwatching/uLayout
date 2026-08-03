@@ -18,7 +18,7 @@ using UnityEngine.UI;
 
 namespace Poke.UI
 {
-    public class Layout : LayoutItem, IComparable<Layout>, ILayoutGroup
+    public class Layout : LayoutItem, ILayoutGroup
     {
         /* THINGS THAT CAN CAUSE A LAYOUT UPDATE
             - non-grow child RectTransform changes size
@@ -121,7 +121,6 @@ namespace Poke.UI
 
         private readonly List<ChildInfo>    _children = new();
         private Vector2                     _contentSize;
-        private int                         _depth;
         private Vector2Int                  _growChildCount;
         private int                         _ignoreCount;
         private Rect                        _innerRect;
@@ -1888,17 +1887,6 @@ namespace Poke.UI
                 GrowChildren(RectTransform.Axis.Vertical);
                 VerticalLayout();
             }
-        }
-
-        public int CompareTo(Layout other) {
-            if(_depth < other._depth) {
-                return 1;
-            }
-            if(_depth == other._depth) {
-                return 0;
-            }
-
-            return -1;
         }
 
         public void RefreshChildCache() {

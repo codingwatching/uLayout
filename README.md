@@ -7,13 +7,15 @@ It's designed with performance in mind&mdash;the system only triggers an update 
 ---
 
 ## Installation
-uLayout can be installed from the Unity Package Manager via git URL: `https://github.com/pokeblokdude/uLayout.git` \
-Alternatively, you can import directly into your project with a `.unitypackage` file, available in the Releases tab.
+uLayout can be installed from the Unity Package Manager via git URL:\
+```https://github.com/pokeblokdude/uLayout.git```
+
+Alternatively, you can import directly into your project with a `.unitypackage` file, available in the [Releases tab](https://github.com/pokeblokdude/uLayout/releases).
 
 ---
 
 ## Setup
-uLayout components can be quickly added to your scene via `GameObject > UI > Layout` (or scene-view right-click menu).
+uLayout components can be quickly added to your scene via `GameObject > UI (Canvas) > Layout >` (or scene-view right-click menu).
 
 All layout elements can choose one of three `SizingMode` options for each axis:\
 `FitContent`: fits the rect tightly around its contents, taking into account padding and internal spacing\
@@ -25,22 +27,27 @@ If your object isn't a container, you can use the `LayoutItem` component, which 
 Further explanation and examples can be found in the sample scene at `Examples/LayoutDemo.unity`. If you've never used CSS flexbox before, I also recommend taking a look at [this guide](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) that covers the basics with super helpful illustrations :)
 
 ### Text Support
-uLayout also supports TextMeshPro `TMP_Text` objects, using the `LayoutText` component. This also derives from `LayoutItem`, offering the same sizing options. This allows text objects to resize depending on contents and font size. Resizing text is fairly expensive, so you generally want to avoid resizing text as much as possible during runtime.
+uLayout also supports TextMeshPro `TMP_Text` objects, using the `LayoutText` component. This also derives from `LayoutItem`, offering the same sizing options. This allows text objects to resize depending on contents and font size. Resizing text is fairly expensive, so you generally want to avoid resizing text as much as possible at runtime.
 
 ### Floating Layout (`OverflowsLineCross`)
 The `OverflowsLineCross` toggle on `LayoutItem` or `Layout` enables floating-item behavior in wrap mode under a Row layout. When active, the item does not inflate the row's height — it keeps its natural size but dynamically blocks the columns it occupies in subsequent rows, allowing other items to flow around it (similar to a floating image in a word processor). The blocking is height-aware: once the item's vertical span ends, the previously blocked columns are freed and the following rows can fill in that space normally.
 
 ---
 
-## Component Settings
-### LayoutItem
+## Components
+### LayoutItem (&larr; `UnityEngine.UI.ILayoutElement`)
 - **Ignore Layout** (`bool`): Whether to exclude this element from layout positioning
-- **Overflows Line Cross** (`bool`): When enabled in wrap mode, this item retains its natural cross size without expanding the row height, and blocks columns in subsequent rows (floating layout behavior).
-- **Size Mode**: Sets the rect sizing mode for each axis. "**FitContent**" has no effect (use derived classes below)
+- **Size Mode**: Sets the rect sizing mode for each axis. "**FitContent**" only affects derived classes (`Layout` and `LayoutText`)
   - **x** (`SizingMode`)
   - **y** (`SizingMode`)
+- **Min Width / Height** (`float`): The minimum size this element should shrink to when the relevant `SizingMode` is set to "**FitContent**" or "**Grow**"
+- **Max Width / Height** (`float`): The maximum size this element should grow to when the relevant `SizingMode` is set to "**FitContent**" or "**Grow**"
+- **Flex Width / Height** (`float`): The relative "weight" of this element when the layout distributes space to `SizingMode.Grow` children
+  - ie: Element 1, flexWidth = 1 - Element 2, flexWidth = 1 -----> both elements are given 50% of the available space
+  - Element 1, flexWidth = 2, Element 2, flexWidth = 1 -----> Element 1 is given 66.6% of the available space, while Element 2 is given 33.3%
+- **Overflows Line Cross** (`bool`): When enabled in wrap mode, this item retains its natural cross size without expanding the row height, and blocks columns in subsequent rows (floating layout behavior).
 
-### Layout (&larr; `LayoutItem`)
+### Layout (&larr; `LayoutItem`, `UnityEngine.UI.ILayoutController`)
 - **Padding**: Set a buffer width between each edge and the layout contents
   - **top, bottom, left, right** (`float`)
 - **Direction** (`enum`)
@@ -57,13 +64,12 @@ The `OverflowsLineCross` toggle on `LayoutItem` or `Layout` enables floating-ite
   - `Start`: Align children to the start of the cross axis (depends on `Direction`: top for Row, left for Column, etc)
   - `Center`: Align children to the center of the cross axis
   - `End`: Align children to the end of the cross axis
-- **Inner Spacing** (`float`): Sets the gap between children on the primary layout axis. Does not work with `Justification.SpaceBetween` (layout will be wrong, just set to 0)
+- **Inner Spacing** (`float`): Sets the gap between children on the primary layout axis. Does nothing when `Justification` set to "**SpaceBetween**"
 - **Ignore Child Scale** (`bool`): Whether to ignore child RectTransform scale property when calculating fit size & layout
+- **Wrap** (`bool`): Whether to wrap overflowing children onto a new line
+- **Line Height** (`float`): The amount of space between lines when `Wrap` is set to true (otherwise does nothing)
 
----
-
-## Known Issues
-- No `overflow` options
+### LayoutText (&larr; `LayoutItem`)
 
 ---
 
