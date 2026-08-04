@@ -7,8 +7,10 @@ It's designed with performance in mind&mdash;the system only triggers an update 
 ---
 
 ## Installation
-uLayout can be installed from the Unity Package Manager via git URL:\
-```https://github.com/pokeblokdude/uLayout.git```
+uLayout can be installed from the Unity Package Manager via git URL:
+```
+https://github.com/pokeblokdude/uLayout.git
+```
 
 Alternatively, you can import directly into your project with a `.unitypackage` file, available in the [Releases tab](https://github.com/pokeblokdude/uLayout/releases).
 
