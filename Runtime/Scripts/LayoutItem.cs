@@ -37,10 +37,6 @@ namespace Poke.UI
         [SerializeField] protected float            m_flexWidth = 1;
         [SerializeField] protected float            m_flexHeight = 1;
         [SerializeField] protected Margins          m_margins;
-        // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
-        // its natural cross size but does not inflate the line, and blocks columns in subsequent
-        // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
-        [SerializeField] protected bool             m_overflowsCrossLine = false;
         
         public float minWidth => m_minWidth;
         public float minHeight => m_minHeight;
@@ -53,7 +49,7 @@ namespace Poke.UI
         private float _preferredWidth, _preferredHeight;
         private int _layoutPriority;
         
-#region Properties
+        #region Properties
         public bool IgnoreLayout
         {
             get => m_ignoreLayout;
@@ -106,15 +102,7 @@ namespace Poke.UI
         public RectTransform Rect => _rect;
         public DrivenTransformProperties TrackerProps => _trackerProps;
         public SizeModes Sizing => m_sizing;
-        public bool OverflowsLineCross
-        {
-            get => m_overflowsCrossLine;
-            set {
-                m_overflowsCrossLine = value;
-                SetDirty();
-            }
-        }
-#endregion
+        #endregion
         
         protected RectTransform _rect;
         protected DrivenRectTransformTracker _tracker;
@@ -126,6 +114,7 @@ namespace Poke.UI
 
         private RectTransform _parentRect;
         private Vector2 _parentSize;
+        private Canvas _canvas;
 
         [Serializable]
         public struct SizeModes : IEquatable<SizeModes>
@@ -151,7 +140,10 @@ namespace Poke.UI
                 _parentRect = transform.parent.GetComponent<RectTransform>();
                 _parent = transform.parent.GetComponent<Layout>();
             }
+            else { Debug.LogError("LayoutItem must be a child of a RectTransform!"); }
 
+            _canvas = GetComponentInParent<Canvas>();
+            
             _trackerProps = DrivenTransformProperties.None;
             _dirty = true;
         }
@@ -189,7 +181,7 @@ namespace Poke.UI
             Matrix4x4 ltw = _rect.localToWorldMatrix;
             
             foreach(Vector3 v in _rectCorners) {
-                LayoutUtil.DrawCenteredDebugBox(v, 0.15f, 0.15f, Color.red);
+                LayoutUtil.DrawCenteredDebugBox(v, 8f * _canvas.transform.localScale.x, 8f * _canvas.transform.localScale.y, Color.red);
             }
 
             Rect r = new Rect(_rectCorners[0], _rectCorners[2] - _rectCorners[0]);

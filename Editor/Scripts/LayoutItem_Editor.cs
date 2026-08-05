@@ -45,7 +45,6 @@ namespace Poke.UI
         private SerializedProperty _flexWidth;
         private SerializedProperty _flexHieght;
         private SerializedProperty _margins;
-        private SerializedProperty _overflowsCrossLine;
 
         protected virtual void OnEnable() {
             _item = target as LayoutItem;
@@ -66,7 +65,6 @@ namespace Poke.UI
             _flexWidth = serializedObject.FindProperty("m_flexWidth");
             _flexHieght = serializedObject.FindProperty("m_flexHeight");
             _margins = serializedObject.FindProperty("m_margins");
-            _overflowsCrossLine = serializedObject.FindProperty("m_overflowsCrossLine");
         }
         
         public override VisualElement CreateInspectorGUI() {
@@ -178,9 +176,6 @@ namespace Poke.UI
 
             PropertyField margins = root.Q<PropertyField>("MarginsField");
             margins.BindProperty(_margins);
-            
-            Toggle overflow = root.Q<Toggle>("CrossLineField");
-            overflow.BindProperty(_overflowsCrossLine);
             
             return root;
         }

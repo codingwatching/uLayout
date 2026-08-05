@@ -49,7 +49,6 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <uie:PropertyField name="MarginsField"/>
-                <ui:Toggle label="Cross-line Overflow" name="CrossLineField"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -90,7 +90,9 @@ namespace Poke.UI
                 _text.ForceMeshUpdate(true, _textChanged);
                 _preferredSize = _text.GetPreferredValues();
 
-                float size = Mathf.Min(_preferredSize.x, m_maxWidth);
+                float size = _preferredSize.x;
+                if(m_useMaxWidth) size = Mathf.Min(m_maxWidth, size);
+                if(m_useMinWidth) size = Mathf.Max(m_minWidth, size);
                 
                 if(m_sizing.x == SizingMode.FitContent) {
                     _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
@@ -103,7 +105,11 @@ namespace Poke.UI
                 Log("<color=white>CalculateLayoutInputVertical</color>");
                 if(m_sizing.y == SizingMode.FitContent) {
                     _preferredSize = _text.GetPreferredValues();
-                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _preferredSize.y);
+
+                    float size = _preferredSize.y;
+                    if(m_useMaxHeight) size = Mathf.Min(m_maxHeight, size);
+                    if(m_useMinHeight) size = Mathf.Max(m_minHeight, size);
+                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
                 }
             }
 
@@ -117,7 +123,10 @@ namespace Poke.UI
                 _preferredSize = _text.GetPreferredValues();
                 Log($"resizing y based on x growth ({_preferredSize.y})");
                 
-                _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _preferredSize.y);
+                float size = _preferredSize.y;
+                if(m_useMaxHeight) size = Mathf.Min(m_maxHeight, size);
+                if(m_useMinHeight) size = Mathf.Max(m_minHeight, size);
+                _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
             }
         }
     }
