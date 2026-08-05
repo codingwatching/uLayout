@@ -123,9 +123,12 @@ namespace Poke.UI
         private Vector2                     _contentSize;
         private Vector2Int                  _growChildCount;
         private int                         _ignoreCount;
-        private Rect                        _innerRect;
+        private Vector2                     _innerSize;
         private Vector2                     _lastSize;
         private readonly List<LineInfo>     _lines = new();
+        // private readonly List<LineInfo>     _blockLines = new();
+        // private readonly List<BlockInfo>    _blocks = new();
+        private float                       _totalLineCrossSize;
 
         #region TypeDef
         public enum Justification
@@ -165,7 +168,7 @@ namespace Poke.UI
             public int lineIndex;   // for wrap: which line index
         }
 
-        private class LineInfo
+        private struct LineInfo
         {
             public int firstChildIdx;      // first child index in _children for this line (inclusive)
             public int lastChildIdx;       // exclusive
@@ -295,11 +298,12 @@ namespace Poke.UI
 #if UNITY_EDITOR
             RefreshedThisFrame.Add(this);
 #endif
-            Log("CalculateLayoutInputHorizontal");
+            Log("<color=white>CalculateLayoutInputHorizontal</color>");
             
             _growChildCount.x = 0;
             _ignoreCount = 0;
-
+            _innerSize = Vector2.zero;
+            
             if(_children.Count > 0) {
                 // get number of disabled/ignore children
                 foreach(ChildInfo c in _children) {
@@ -310,7 +314,7 @@ namespace Poke.UI
                         c.size = c.size.SetX(c.rect.rect.size.x * (m_ignoreChildScale ? 1 : c.rect.localScale.x));
                     }
                 }
-
+                
                 float primarySize = m_justifyContent == Justification.SpaceBetween ? 0 : m_innerSpacing * (_children.Count - _ignoreCount - 1);
                 float crossSize = 0;
 
@@ -393,20 +397,20 @@ namespace Poke.UI
                         _contentSize.x + m_padding.left + m_padding.right
                     );
                 }
-                
-                Log($"calculated rect x size: {_rect.rect.size.x:f3}");
+
             }
             else {
                 _contentSize = Vector2.zero;
             }
             
-            Log($"content x size: {_contentSize.x:f3}");
+            _innerSize.x = _rect.rect.size.x - m_padding.left - m_padding.right;
+            Log($"calculated rect x size: {_rect.rect.size.x:f3}, inner: {_innerSize.x}");
         }
 
         public override void CalculateLayoutInputVertical() {
             if(!_dirty) return;
             
-            Log("CalculateLayoutInputVertical");
+            Log("<color=white>CalculateLayoutInputVertical</color>");
             
             _growChildCount.y = 0;
 
@@ -472,7 +476,9 @@ namespace Poke.UI
                         // SKIP cross-grow (Y-Grow) items — they won't inflate the line cross;
                         // only their own rects will stretch.
                         for(int li = 0; li < _lines.Count; li++) {
-                            _lines[li].crossSize = 0;
+                            LineInfo line = _lines[li];
+                            line.crossSize = 0;
+                            _lines[li] = line;
                         }
                         for(int i = 0; i < _children.Count; i++) {
                             ChildInfo c = _children[i];
@@ -480,7 +486,10 @@ namespace Poke.UI
                             if (c.li && (c.li.Sizing.y == SizingMode.Grow || c.li.OverflowsLineCross)) continue;
                             int li = c.lineIndex;
                             if (li < 0 || li >= _lines.Count) continue;
-                            _lines[li].crossSize = Mathf.Max(_lines[li].crossSize, c.size.y);
+
+                            LineInfo line = _lines[li];
+                            line.crossSize = Mathf.Max(line.crossSize, c.size.y);
+                            _lines[li] = line;
                         }
                         float sum = 0;
                         for(int i = 0; i < _lines.Count; i++) {
@@ -514,26 +523,23 @@ namespace Poke.UI
             else {
                 _contentSize = Vector2.zero;
             }
-            
-            Log($"content y size: {_contentSize.y:f3}");
-            
+
+
+            _innerSize.y = _rect.rect.size.y - m_padding.top - m_padding.bottom;
+            Log($"calculated rect y size: {_rect.rect.size.y:f3}, inner: {_innerSize.y}");
         }
 
         public void SetLayoutHorizontal() {
             if(!_dirty) return;
             
             Log("SetLayoutHorizontal");
-
-            _innerRect = new Rect(_rect.rect);
-            _innerRect.position += new Vector2(m_padding.left, m_padding.bottom);
-            _innerRect.size -= new Vector2(m_padding.left + m_padding.right, m_padding.top + m_padding.bottom);
             
             if(m_wrap && _lines.Count > 0) {
                 GrowChildrenWrapped(RectTransform.Axis.Horizontal);
                 HorizontalLayoutWrapped();
             }
             else {
-                GrowChildren(RectTransform.Axis.Horizontal);
+                GrowChildrenHorizontal();
                 HorizontalLayout();
             }
         }
@@ -541,14 +547,14 @@ namespace Poke.UI
         public void SetLayoutVertical() {
             if(!_dirty) return;
             
-            Log("SetLayoutVertical");
+            Log("<color=white>SetLayoutVertical</color>");
             
             if(m_wrap && _lines.Count > 0) {
                 GrowChildrenWrapped(RectTransform.Axis.Vertical);
                 VerticalLayoutWrapped();
             }
             else {
-                GrowChildren(RectTransform.Axis.Vertical);
+                GrowChildrenVertical();
                 VerticalLayout();
             }
 
@@ -1010,160 +1016,166 @@ namespace Poke.UI
                     break;
             }
         }
-        
-        private void GrowChildren(RectTransform.Axis axis) {
+
+        private void GrowChildrenHorizontal() {
+            if(_growChildCount.x == 0) return;
+            
+            Log($"growing {_growChildCount.x} children horizontally (rect: {_rect.rect.size.x}, inner: {_innerSize.x}, content: {_contentSize.x})");
+            
+            float count = _growChildCount.x;
             float size;
             float crossSize;
-            float leftover;
+            float leftover = 0;
             float flexTotal = 0;
             
-            switch(axis) {
-                case RectTransform.Axis.Horizontal:
-                    if(_growChildCount.x > 0) {
-                        Log($"growing {_growChildCount.x} children horizontally (rect: {_rect.rect.size.x}, inner: {_innerRect.size.x}, content: {_contentSize.x})");
+            switch(m_direction) {
+                // GROW HORIZONTAL --> PRIMARY AXIS
+                case LayoutDirection.Row:
+                case LayoutDirection.RowReverse:
+                    // save total flex sum for size distribution
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.x != SizingMode.Grow)
+                            continue;
+
+                        flexTotal += c.li.flexibleWidth;
+                    }
+                    
+                    leftover = _rect.rect.size.x - _contentSize.x - m_padding.left - m_padding.right;
+                    Log($"free space: {leftover}");
+                    
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.x != SizingMode.Grow)
+                            continue;
                         
-                        float count = _growChildCount.x;
-                        switch(m_direction) {
-                            case LayoutDirection.Row:
-                            case LayoutDirection.RowReverse:
-                                // save total flex sum for size distribution
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
+                        size = leftover * (c.li.flexibleWidth / flexTotal) - c.margins.left - c.margins.right;
+                        if(c.li.UseMaxWidth) size = Mathf.Min(c.li.preferredWidth, size);
+                        if(c.li.UseMinWidth) size = Mathf.Max(c.li.minWidth, size);
+                        
+                        Log($"growing \"{c.li.name}\" x axis ({size}) - margins: {c.margins.left}, {c.margins.right}");
+                        
+                        c.size.x = size;
+                        _contentSize.x += size + c.margins.left + c.margins.right;
 
-                                    flexTotal += c.li.flexibleWidth;
+                        // size actually needs to change
+                        if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
+                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
+
+                            // special case for text growing
+                            if(c.li is LayoutText t) {
+                                float oldSize = c.size.y;
+                                t.HandleGrowSizingX();
+                                float diff = c.rect.rect.size.y * (m_ignoreChildScale ? 1 : c.rect.localScale.y) - oldSize;
+                                // text resized vertically bc of growth
+                                if(!Mathf.Approximately(0, diff)) {
+                                    c.size.y = oldSize + diff;
+                                    GrowSizingXCallback(diff);
                                 }
-                                
-                                leftover = _rect.rect.size.x - _contentSize.x - m_padding.left - m_padding.right;
-                                Log($"free space: {leftover}");
-                                
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
-
-                                    if(c.li.Sizing.x == SizingMode.Grow) {
-                                        size = leftover * (c.li.flexibleWidth / flexTotal) - c.margins.left - c.margins.right;
-                                        Log($"growing \"{c.li.name}\" x axis ({size}) - margins: {c.margins.left}, {c.margins.right}");
-                                        c.size.x = size;
-                                        _contentSize.x += size + c.margins.left + c.margins.right;
-
-                                        // size actually needs to change
-                                        if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
-                                            c.rect.SetSizeWithCurrentAnchors(axis, size);
-
-                                            // special case for text growing
-                                            if(c.li is LayoutText t) {
-                                                float oldSize = c.size.y;
-                                                t.HandleGrowSizingX();
-                                                float diff = c.rect.rect.size.y * (m_ignoreChildScale ? 1 : c.rect.localScale.y) - oldSize;
-                                                // text resized vertically bc of growth
-                                                if(!Mathf.Approximately(0, diff)) {
-                                                    c.size.y = oldSize + diff;
-                                                    GrowSizingXCallback(diff);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            case LayoutDirection.Column:
-                            case LayoutDirection.ColumnReverse:
-                                crossSize = _rect.rect.size.x - m_padding.left - m_padding.right;
-
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
-
-                                    if(c.li.Sizing.x == SizingMode.Grow) {
-                                        size = crossSize - c.margins.left - c.margins.right;
-                                        
-                                        Log($"growing \"{c.li.name}\" x axis ({size})");
-                                        
-                                        c.size.x = size;
-                                        _contentSize.x = Mathf.Max(size + c.margins.left + c.margins.bottom, _contentSize.x);
-
-                                        // size actually needs to change
-                                        if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
-                                            c.rect.SetSizeWithCurrentAnchors(axis, size);
-
-                                            // special case for text growing
-                                            if(c.li is LayoutText t) {
-                                                float oldSize = c.size.y;
-                                                t.HandleGrowSizingX();
-                                                float diff = c.rect.rect.size.y * (m_ignoreChildScale ? 1 : c.rect.localScale.y) - oldSize;
-                                                // text resized vertically bc of growth
-                                                if(!Mathf.Approximately(0, diff)) {
-                                                    c.size.y = oldSize + diff;
-                                                    GrowSizingXCallback(diff);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
+                            }
                         }
                     }
                     break;
-                case RectTransform.Axis.Vertical:
-                    if(_growChildCount.y > 0) {
-                        Log($"growing {_growChildCount.y} children vertically (rect: {_rect.rect.size.y}, content: {_contentSize.y})");
+                // GROW HORIZONTAL --> CROSS AXIS
+                case LayoutDirection.Column:
+                case LayoutDirection.ColumnReverse:
+                    crossSize = _rect.rect.size.x - m_padding.left - m_padding.right;
+
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.x != SizingMode.Grow)
+                            continue;
                         
-                        float count = _growChildCount.y;
-                        switch(m_direction)
-                        {
-                            case LayoutDirection.Row:
-                            case LayoutDirection.RowReverse:
-                                crossSize = _rect.rect.size.y - m_padding.top - m_padding.bottom;
+                        size = crossSize - c.margins.left - c.margins.right;
+                        if(c.li.UseMaxWidth) size = Mathf.Min(c.li.preferredWidth, size);
+                        if(c.li.UseMinWidth) size = Mathf.Max(c.li.minWidth, size);
+                        
+                        Log($"growing \"{c.li.name}\" x axis ({size})");
+                        
+                        c.size.x = size;
+                        _contentSize.x = Mathf.Max(size + c.margins.left + c.margins.bottom, _contentSize.x);
 
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
+                        // size actually needs to change
+                        if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
+                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
 
-                                    if(c.li.Sizing.y == SizingMode.Grow) {
-                                        size = crossSize - c.margins.top - c.margins.bottom;
-                                        
-                                        Log($"growing \"{c.li.name}\" y axis ({size})");
-                                        
-                                        c.size.y = size;
-                                        _contentSize.y = Mathf.Max(size + c.margins.top + c.margins.bottom, _contentSize.y);
-
-                                        // size actually needs to change
-                                        if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
-                                            c.rect.SetSizeWithCurrentAnchors(axis, size);
-                                        }
-                                    }
+                            // special case for text growing
+                            if(c.li is LayoutText t) {
+                                float oldSize = c.size.y;
+                                t.HandleGrowSizingX();
+                                float diff = c.rect.rect.size.y * (m_ignoreChildScale ? 1 : c.rect.localScale.y) - oldSize;
+                                // text resized vertically bc of growth
+                                if(!Mathf.Approximately(0, diff)) {
+                                    c.size.y = oldSize + diff;
+                                    GrowSizingXCallback(diff);
                                 }
-                                break;
-                            case LayoutDirection.Column:
-                            case LayoutDirection.ColumnReverse:
-                                // save total flex sum for size distribution
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
+                            }
+                        }
+                    }
+                    break;
+            }
+        
+        }
+        
+        private void GrowChildrenVertical() {
+            if(_growChildCount.y == 0) return;
+            
+            Log($"growing {_growChildCount.y} children vertically (rect: {_rect.rect.size.y}, inner: {_innerSize.y}, content: {_contentSize.y})");
+            
+            float count = _growChildCount.y;
+            float size;
+            float crossSize;
+            float leftover = 0;
+            float flexTotal = 0;
+            
+            switch(m_direction) {
+                // GROW VERTICAL --> CROSS AXIS
+                case LayoutDirection.Row:
+                case LayoutDirection.RowReverse:
+                    crossSize = _rect.rect.size.y - m_padding.top - m_padding.bottom;
 
-                                    flexTotal += c.li.flexibleHeight;
-                                }
-                                
-                                leftover = _rect.rect.size.y - _contentSize.y - m_padding.top - m_padding.bottom;
-                                
-                                foreach(ChildInfo c in _children) {
-                                    if(!c.li || CheckIgnoreElem(c))
-                                        continue;
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
+                            continue;
+                        
+                        size = crossSize - c.margins.top - c.margins.bottom;
+                        size = Mathf.Max(c.li.minHeight, Mathf.Min(c.li.preferredHeight, size));
+                        
+                        Log($"growing \"{c.li.name}\" y axis ({size})");
+                        
+                        c.size.y = size;
+                        _contentSize.y = Mathf.Max(size + c.margins.top + c.margins.bottom, _contentSize.y);
 
-                                    if(c.li.Sizing.y == SizingMode.Grow) {
-                                        size = leftover * (c.li.flexibleHeight / flexTotal) - c.margins.top - c.margins.bottom;
-                                        
-                                        Log($"growing \"{c.li.name}\" y axis ({size})");
-                                        c.size.y = size;
-                                        _contentSize.y += size + c.margins.top + c.margins.bottom;
+                        // size actually needs to change
+                        if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
+                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+                        }
+                    }
+                    break;
+                // GROW VERTICAL --> PRIMARY AXIS
+                case LayoutDirection.Column:
+                case LayoutDirection.ColumnReverse:
+                    // save total flex sum for size distribution
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
+                            continue;
 
-                                        // size actually needs to change
-                                        if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
-                                            c.rect.SetSizeWithCurrentAnchors(axis, size);
-                                        }
-                                    }
-                                }
-                                break;
+                        flexTotal += c.li.flexibleHeight;
+                    }
+                    
+                    leftover = _rect.rect.size.y - _contentSize.y - m_padding.top - m_padding.bottom;
+                    
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
+                            continue;
+                        
+                        size = leftover * (c.li.flexibleHeight / flexTotal) - c.margins.top - c.margins.bottom;
+                        size = Mathf.Max(c.li.minHeight, Mathf.Min(c.li.preferredHeight, size));
+                        
+                        Log($"growing \"{c.li.name}\" y axis ({size})");
+                        c.size.y = size;
+                        _contentSize.y += size + c.margins.top + c.margins.bottom;
+
+                        // size actually needs to change
+                        if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
+                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
                         }
                     }
                     break;
@@ -1434,14 +1446,15 @@ namespace Poke.UI
                     _rect.rect.size.x - m_padding.left - m_padding.right
                     : _rect.rect.size.y - m_padding.top - m_padding.bottom;
 
-                foreach(LineInfo line in _lines) {
+                for(int i = 0; i < _lines.Count; i++) {
+                    LineInfo line = _lines[i];
                     if (line.growCount == 0) continue;
                     float leftover = containerPrimary - line.primarySize;
                     if (leftover <= 0) continue;
                     float perGrow = leftover / line.growCount;
 
-                    for(int i = line.firstChildIdx; i < line.lastChildIdx; i++) {
-                        ChildInfo c = _children[i];
+                    for(int ch = line.firstChildIdx; ch < line.lastChildIdx; ch++) {
+                        ChildInfo c = _children[ch];
                         if (CheckIgnoreElem(c) || !c.li) continue;
                         bool grow = primaryIsX
                             ? c.li.Sizing.x == SizingMode.Grow
@@ -1462,6 +1475,7 @@ namespace Poke.UI
                         }
                     }
                     line.primarySize += perGrow * line.growCount;
+                    _lines[i] = line;
                 }
             }
             else
@@ -1884,7 +1898,7 @@ namespace Poke.UI
 
             if(!_dirty && sizeChanged) {
                 Log("forcing vertical layout update from x grow callback");
-                GrowChildren(RectTransform.Axis.Vertical);
+                GrowChildrenVertical();
                 VerticalLayout();
             }
         }
@@ -1914,7 +1928,6 @@ namespace Poke.UI
                         size = rt.rect.size * (m_ignoreChildScale ? Vector2.one : rt.localScale),
                         enabled = rt.gameObject.activeInHierarchy,
                         ignoreLayout = li && li.IgnoreLayout,
-                        lineIndex = 0,
                     }
                 );
             }

@@ -45,7 +45,7 @@ namespace Poke.UI
         public override void Update() {
             base.Update();
 
-            _text.textWrappingMode = m_sizing.x != SizingMode.FitContent ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
+            // _text.textWrappingMode = m_sizing.x != SizingMode.FitContent ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
 
             if(String.CompareOrdinal(_str, _text.text) != 0) {
                 _str = _text.text;
@@ -86,20 +86,23 @@ namespace Poke.UI
         
         public override void CalculateLayoutInputHorizontal() {
             if(_dirty) {
-                Log("CalculateLayoutInputHorizontal");
+                Log("<color=white>CalculateLayoutInputHorizontal</color>");
                 _text.ForceMeshUpdate(true, _textChanged);
                 _preferredSize = _text.GetPreferredValues();
 
+                float size = Mathf.Min(_preferredSize.x, m_maxWidth);
+                
                 if(m_sizing.x == SizingMode.FitContent) {
-                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _preferredSize.x);
+                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
                 }
             }
         }
 
         public override void CalculateLayoutInputVertical() {
             if(_dirty) {
-                Log("CalculateLayoutInputVertical");
+                Log("<color=white>CalculateLayoutInputVertical</color>");
                 if(m_sizing.y == SizingMode.FitContent) {
+                    _preferredSize = _text.GetPreferredValues();
                     _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _preferredSize.y);
                 }
             }

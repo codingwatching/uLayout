@@ -23,24 +23,24 @@ namespace Poke.UI
     ]
     public class LayoutItem : MonoBehaviour, ILayoutElement
     {
-        [SerializeField] protected bool m_log;
-        
-        [Header("Layout Item")]
-        [SerializeField] protected bool m_ignoreLayout = false;
-        [SerializeField] protected SizeModes m_sizing;
-        [SerializeField] protected float m_minWidth;
-        [SerializeField] protected float m_minHeight;
-        [SerializeField] protected float m_maxWidth;
-        [SerializeField] protected float m_maxHeight;
-        [Tooltip("The relative \"weight\" of this element in the horizontal layout")]
-        [SerializeField] protected float m_flexWidth = 1;
-        [Tooltip("The relative \"weight\" of this element in the vertical layout")]
-        [SerializeField] protected float m_flexHeight = 1;
-        [SerializeField] protected Margins m_margins;
+        [SerializeField] protected bool             m_log;
+        [SerializeField] protected bool             m_ignoreLayout = false;
+        [SerializeField] protected SizeModes        m_sizing;
+        [SerializeField, Min(0)] protected float    m_minWidth;
+        [SerializeField] protected bool             m_useMinWidth;
+        [SerializeField, Min(0)] protected float    m_minHeight;
+        [SerializeField] protected bool             m_useMinHeight;
+        [SerializeField, Min(0)] protected float    m_maxWidth;
+        [SerializeField] protected bool             m_useMaxWidth;
+        [SerializeField, Min(0)] protected float    m_maxHeight;
+        [SerializeField] protected bool             m_useMaxHeight;
+        [SerializeField] protected float            m_flexWidth = 1;
+        [SerializeField] protected float            m_flexHeight = 1;
+        [SerializeField] protected Margins          m_margins;
         // In wrap mode, this item shouldn't contribute to the line's cross size — it retains
         // its natural cross size but does not inflate the line, and blocks columns in subsequent
         // lines (similar to a "floating" image in Word). Only meaningful under a wrap parent.
-        [SerializeField] protected bool m_overflowsCrossLine = false;
+        [SerializeField] protected bool             m_overflowsCrossLine = false;
         
         public float minWidth => m_minWidth;
         public float minHeight => m_minHeight;
@@ -70,6 +70,39 @@ namespace Poke.UI
                 SetDirty();
             }
         }
+
+        public bool UseMinWidth {
+            get => m_useMinWidth;
+            set {
+                m_useMinWidth = value;
+                SetDirty();
+            }
+        }
+
+        public bool UseMinHeight {
+            get => m_useMinHeight;
+            set {
+                m_useMinHeight = value;
+                SetDirty();
+            }
+        }
+        
+        public bool UseMaxWidth {
+            get => m_useMaxWidth;
+            set {
+                m_useMaxWidth = value;
+                SetDirty();
+            }
+        }
+        
+        public bool UseMaxHeight {
+            get => m_useMaxHeight;
+            set {
+                m_useMaxHeight = value;
+                SetDirty();
+            }
+        }
+        
         public RectTransform Rect => _rect;
         public DrivenTransformProperties TrackerProps => _trackerProps;
         public SizeModes Sizing => m_sizing;
@@ -192,11 +225,11 @@ namespace Poke.UI
         }
 
         public virtual void CalculateLayoutInputHorizontal() {
-            Log("CalculateLayoutInputHorizontal");
+            Log("<color=white>CalculateLayoutInputHorizontal</color>");
         }
 
         public virtual void CalculateLayoutInputVertical() {
-            Log("CalculateLayoutInputVertical");
+            Log("<color=white>CalculateLayoutInputVertical</color>");
         }
     }
 }

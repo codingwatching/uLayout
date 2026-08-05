@@ -31,7 +31,7 @@ Further explanation and examples can be found in the sample scene at `Examples/L
 ### Text Support
 uLayout also supports TextMeshPro `TMP_Text` objects, using the `LayoutText` component. This also derives from `LayoutItem`, offering the same sizing options. This allows text objects to resize depending on contents and font size. Resizing text is fairly expensive, so you generally want to avoid resizing text as much as possible at runtime.
 
-### Floating Layout (`OverflowsLineCross`)
+### Floating Layout
 The `OverflowsLineCross` toggle on `LayoutItem` or `Layout` enables floating-item behavior in wrap mode under a Row layout. When active, the item does not inflate the row's height — it keeps its natural size but dynamically blocks the columns it occupies in subsequent rows, allowing other items to flow around it (similar to a floating image in a word processor). The blocking is height-aware: once the item's vertical span ends, the previously blocked columns are freed and the following rows can fill in that space normally.
 
 ---
@@ -49,7 +49,7 @@ The `OverflowsLineCross` toggle on `LayoutItem` or `Layout` enables floating-ite
   - Element 1, flexWidth = 2, Element 2, flexWidth = 1 -----> Element 1 is given 66.6% of the available space, while Element 2 is given 33.3%
 - **Overflows Line Cross** (`bool`): When enabled in wrap mode, this item retains its natural cross size without expanding the row height, and blocks columns in subsequent rows (floating layout behavior).
 
-### Layout (&larr; `LayoutItem`, `UnityEngine.UI.ILayoutController`)
+### Layout (&larr; `LayoutItem`, `UnityEngine.UI.ILayoutGroup`)
 - **Padding**: Set a buffer width between each edge and the layout contents
   - **top, bottom, left, right** (`float`)
 - **Direction** (`enum`)

@@ -34,6 +34,10 @@ namespace Poke.UI
         private SerializedProperty _sizing;
         private SerializedProperty _sizingX;
         private SerializedProperty _sizingY;
+        private SerializedProperty _useMinWidth;
+        private SerializedProperty _useMinHeight;
+        private SerializedProperty _useMaxWidth;
+        private SerializedProperty _useMaxHeight;
         private SerializedProperty _minWidth;
         private SerializedProperty _minHeight;
         private SerializedProperty _maxWidth;
@@ -51,6 +55,10 @@ namespace Poke.UI
             _sizing = serializedObject.FindProperty("m_sizing");
             _sizingX = _sizing.FindPropertyRelative("x");
             _sizingY = _sizing.FindPropertyRelative("y");
+            _useMinWidth = serializedObject.FindProperty("m_useMinWidth");
+            _useMinHeight = serializedObject.FindProperty("m_useMinHeight");
+            _useMaxWidth = serializedObject.FindProperty("m_useMaxWidth");
+            _useMaxHeight = serializedObject.FindProperty("m_useMaxHeight");
             _minWidth = serializedObject.FindProperty("m_minWidth");
             _minHeight = serializedObject.FindProperty("m_minHeight");
             _maxWidth = serializedObject.FindProperty("m_maxWidth");
@@ -88,16 +96,46 @@ namespace Poke.UI
                     (SizingMode)prop.FindPropertyRelative("y").enumValueIndex != SizingMode.Fixed
                 );
             });
+
+            Toggle useMinWidth = root.Q<Toggle>("MinWidthToggle");
+            useMinWidth.BindProperty(_useMinWidth);
+            useMinWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
+            useMinWidth.TrackPropertyValue(_sizingX, prop => {
+                useMinWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed);
+            });
+            
+            Toggle useMinHeight = root.Q<Toggle>("MinHeightToggle");
+            useMinHeight.BindProperty(_useMinHeight);
+            useMinHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            useMinHeight.TrackPropertyValue(_sizingY, prop => {
+                useMinHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed);
+            });
+            
+            Toggle useMaxWidth = root.Q<Toggle>("MaxWidthToggle");
+            useMaxWidth.BindProperty(_useMaxWidth);
+            useMaxWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
+            useMaxWidth.TrackPropertyValue(_sizingX, prop => {
+                useMaxWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed);
+            });
+            
+            Toggle useMaxHeight = root.Q<Toggle>("MaxHeightToggle");
+            useMaxHeight.BindProperty(_useMaxHeight);
+            useMaxHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
+            useMaxHeight.TrackPropertyValue(_sizingY, prop => {
+                useMaxHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed);
+            });
             
             FloatField minWidth = root.Q<FloatField>("MinWidthField");
             minWidth.BindProperty(_minWidth);
-            minWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
-            minWidth.TrackPropertyValue(_sizingX, prop => minWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
+            minWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed && _useMinWidth.boolValue);
+            minWidth.TrackPropertyValue(_sizingX, prop => minWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed && _useMinWidth.boolValue));
+            minWidth.TrackPropertyValue(_useMinWidth, prop => minWidth.SetEnabled(prop.boolValue && (SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed));
             
             FloatField minHeight = root.Q<FloatField>("MinHeightField");
             minHeight.BindProperty(_minHeight);
-            minHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
-            minHeight.TrackPropertyValue(_sizingY, prop => minHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
+            minHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed && _useMinHeight.boolValue);
+            minHeight.TrackPropertyValue(_sizingY, prop => minHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed && _useMinHeight.boolValue));
+            minHeight.TrackPropertyValue(_useMinHeight, prop => minHeight.SetEnabled(prop.boolValue && (SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed));
             
             Label maxLabel = root.Q<Label>("MaxLabel");
             maxLabel.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed || (SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
@@ -110,14 +148,16 @@ namespace Poke.UI
             
             FloatField maxWidth = root.Q<FloatField>("MaxWidthField");
             maxWidth.BindProperty(_maxWidth);
-            maxWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed);
-            maxWidth.TrackPropertyValue(_sizingX, prop => maxWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
+            maxWidth.SetEnabled((SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed && _useMaxWidth.boolValue);
+            maxWidth.TrackPropertyValue(_sizingX, prop => maxWidth.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed && _useMaxWidth.boolValue));
+            maxWidth.TrackPropertyValue(_useMaxWidth, prop => maxWidth.SetEnabled(prop.boolValue && (SizingMode)_sizingX.enumValueIndex != SizingMode.Fixed));
             
             FloatField maxHeight = root.Q<FloatField>("MaxHeightField");
             maxHeight.BindProperty(_maxHeight);
-            maxHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed);
-            maxHeight.TrackPropertyValue(_sizingY, prop => maxHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed));
-
+            maxHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed && _useMaxHeight.boolValue);
+            maxHeight.TrackPropertyValue(_sizingY, prop => maxHeight.SetEnabled((SizingMode)prop.enumValueIndex != SizingMode.Fixed && _useMaxHeight.boolValue));
+            maxHeight.TrackPropertyValue(_useMaxHeight, prop => maxHeight.SetEnabled(prop.boolValue && (SizingMode)_sizingY.enumValueIndex != SizingMode.Fixed));
+            
             Label flexLabel = root.Q<Label>("FlexLabel");
             flexLabel.SetEnabled((SizingMode)_sizingX.enumValueIndex == SizingMode.Grow || (SizingMode)_sizingY.enumValueIndex == SizingMode.Grow);
             flexLabel.TrackPropertyValue(_sizing, prop => {
@@ -134,7 +174,7 @@ namespace Poke.UI
             FloatField flexHeight = root.Q<FloatField>("FlexHeightField");
             flexHeight.BindProperty(_flexHieght);
             flexHeight.SetEnabled((SizingMode)_sizingY.enumValueIndex == SizingMode.Grow);
-            flexHeight.TrackPropertyValue(_sizingY, prop => flexWidth.SetEnabled((SizingMode)prop.enumValueIndex == SizingMode.Grow));
+            flexHeight.TrackPropertyValue(_sizingY, prop => flexHeight.SetEnabled((SizingMode)prop.enumValueIndex == SizingMode.Grow));
 
             PropertyField margins = root.Q<PropertyField>("MarginsField");
             margins.BindProperty(_margins);
