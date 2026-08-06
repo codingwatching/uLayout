@@ -12,8 +12,8 @@
     copies or substantial portions of the Software.
 */
 using System;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Poke.UI
@@ -26,7 +26,7 @@ namespace Poke.UI
         private float _fontSize;
         private string _str;
         private bool _textChanged;
-        
+
         protected override void Awake() {
             base.Awake();
             _text = GetComponent<TMP_Text>();
@@ -34,8 +34,7 @@ namespace Poke.UI
 
         protected override void OnEnable() {
             base.OnEnable();
-            Log("enable");
-            
+
             _str = _text.text;
             _fontSize = _text.fontSize;
             _text.ForceMeshUpdate(true, true);
@@ -45,8 +44,8 @@ namespace Poke.UI
 
         public override void Update() {
             base.Update();
-            
-            _text.textWrappingMode = m_sizing.x != SizingMode.FitContent ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
+
+            // _text.textWrappingMode = m_sizing.x != SizingMode.FitContent ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
 
             if(String.CompareOrdinal(_str, _text.text) != 0) {
                 _str = _text.text;
@@ -84,28 +83,33 @@ namespace Poke.UI
         private void Log(object msg) {
             if(m_log) Debug.Log($"[{_frame}] [LT:{gameObject.name}]: {msg}");
         }
-
+        
         public override void CalculateLayoutInputHorizontal() {
-
             if(_dirty) {
-                Log("CalculateLayoutInputHorizontal");
+                Log("<color=white>CalculateLayoutInputHorizontal</color>");
                 _text.ForceMeshUpdate(true, _textChanged);
                 _preferredSize = _text.GetPreferredValues();
 
+                float size = _preferredSize.x;
+                if(m_useMaxWidth) size = Mathf.Min(m_maxWidth, size);
+                if(m_useMinWidth) size = Mathf.Max(m_minWidth, size);
+                
                 if(m_sizing.x == SizingMode.FitContent) {
-                    Log($"fitting x ({_preferredSize.x})");
-                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _preferredSize.x);
+                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
                 }
             }
         }
 
         public override void CalculateLayoutInputVertical() {
             if(_dirty) {
-                Log("CalculateLayoutInputVertical");
-                
+                Log("<color=white>CalculateLayoutInputVertical</color>");
                 if(m_sizing.y == SizingMode.FitContent) {
-                    Log($"fitting y ({_preferredSize.y})");
-                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _preferredSize.y);
+                    _preferredSize = _text.GetPreferredValues();
+
+                    float size = _preferredSize.y;
+                    if(m_useMaxHeight) size = Mathf.Min(m_maxHeight, size);
+                    if(m_useMinHeight) size = Mathf.Max(m_minHeight, size);
+                    _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
                 }
             }
 
@@ -118,8 +122,11 @@ namespace Poke.UI
                 _text.ForceMeshUpdate();
                 _preferredSize = _text.GetPreferredValues();
                 Log($"resizing y based on x growth ({_preferredSize.y})");
-            
-                _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _preferredSize.y);
+                
+                float size = _preferredSize.y;
+                if(m_useMaxHeight) size = Mathf.Min(m_maxHeight, size);
+                if(m_useMinHeight) size = Mathf.Max(m_minHeight, size);
+                _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
             }
         }
     }

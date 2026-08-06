@@ -249,6 +249,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &117821695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,6 +421,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -416,6 +446,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 4
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &162988276
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +506,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -483,6 +531,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 16
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 1
 --- !u!114 &162988279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,6 +702,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -661,6 +727,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &214602367
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,6 +960,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!1 &228051139
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,6 +1031,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 8
@@ -957,6 +1056,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &260314257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,6 +1190,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 64
     bottom: 64
@@ -1098,6 +1215,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &289876040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1191,6 +1311,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &293280499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1346,6 +1481,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &313861189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1576,6 +1726,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -1586,6 +1751,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &343053648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,6 +1884,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &360253928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1871,6 +2054,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -1881,6 +2079,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &497310060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,6 +2137,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &497310063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2091,6 +2307,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &646719662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2439,6 +2670,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -2449,6 +2695,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &711031888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2623,6 +2872,21 @@ MonoBehaviour:
   m_sizing:
     x: 1
     y: 2
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -2633,6 +2897,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 16
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &781615155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2745,7 +3012,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 138.17, y: 100}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &860467372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2801,6 +3068,21 @@ MonoBehaviour:
   m_sizing:
     x: 1
     y: 1
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!1 &914481866
 GameObject:
   m_ObjectHideFlags: 0
@@ -2837,7 +3119,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 142.3}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &914481868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2912,7 +3194,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 72.7}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &919292486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3006,6 +3288,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -3016,6 +3313,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -3154,6 +3454,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &994240095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3460,6 +3775,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 64
     bottom: 64
@@ -3470,6 +3800,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1066469972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3563,6 +3896,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1149273952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3794,6 +4142,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -3804,6 +4167,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1149534236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3897,6 +4263,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -3907,6 +4288,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &1191247594
 GameObject:
   m_ObjectHideFlags: 0
@@ -4038,6 +4422,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -4048,6 +4447,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1191940704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4143,6 +4545,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -4153,6 +4570,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 16
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 1
 --- !u!114 &1212911549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4248,6 +4668,21 @@ MonoBehaviour:
   m_sizing:
     x: 1
     y: 1
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 64
     bottom: 64
@@ -4258,6 +4693,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1221409043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4337,7 +4775,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228376616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4355,6 +4793,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 12
     bottom: 12
@@ -4365,6 +4818,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1228376617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4533,6 +4989,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -4543,6 +5014,9 @@ MonoBehaviour:
   m_alignContent: 2
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &1458607634
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,6 +5072,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1458607637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4753,6 +5242,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1491542983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5085,6 +5589,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!1 &1588500895
 GameObject:
   m_ObjectHideFlags: 0
@@ -5128,7 +5647,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1588500897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5146,6 +5665,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 2
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -5156,6 +5690,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 1
 --- !u!114 &1588500898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5339,6 +5876,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 64
     bottom: 64
@@ -5349,6 +5901,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1670406634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5442,6 +5997,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1687583710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5597,6 +6167,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1724996049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5752,6 +6337,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1727149645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6061,6 +6661,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 4
     bottom: 4
@@ -6071,6 +6686,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 4
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!114 &1754041144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6341,6 +6959,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1825502688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6499,6 +7132,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!1 &1842710407
 GameObject:
   m_ObjectHideFlags: 0
@@ -6554,6 +7202,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -6564,6 +7227,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &1862548878
 GameObject:
   m_ObjectHideFlags: 0
@@ -6694,6 +7360,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1875483526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6926,6 +7607,21 @@ MonoBehaviour:
   m_sizing:
     x: 1
     y: 2
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 0
@@ -6936,6 +7632,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 0
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &1912177723
 GameObject:
   m_ObjectHideFlags: 0
@@ -6991,6 +7690,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1912177726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7146,6 +7860,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
 --- !u!114 &1955216943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7310,6 +8039,21 @@ MonoBehaviour:
   m_sizing:
     x: 2
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 0
     bottom: 8
@@ -7320,6 +8064,9 @@ MonoBehaviour:
   m_alignContent: 0
   m_innerSpacing: 8
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 0
 --- !u!1 &2083962298
 GameObject:
   m_ObjectHideFlags: 0
@@ -7527,6 +8274,21 @@ MonoBehaviour:
   m_sizing:
     x: 0
     y: 0
+  m_minWidth: 0
+  m_useMinWidth: 0
+  m_minHeight: 0
+  m_useMinHeight: 0
+  m_maxWidth: 0
+  m_useMaxWidth: 0
+  m_maxHeight: 0
+  m_useMaxHeight: 0
+  m_flexWidth: 1
+  m_flexHeight: 1
+  m_margins:
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
   m_padding:
     top: 8
     bottom: 8
@@ -7537,6 +8299,9 @@ MonoBehaviour:
   m_alignContent: 1
   m_innerSpacing: 16
   m_ignoreChildScale: 0
+  m_wrap: 0
+  m_lineSpacing: 0
+  m_alignItems: 1
 --- !u!114 &2126070721
 MonoBehaviour:
   m_ObjectHideFlags: 0

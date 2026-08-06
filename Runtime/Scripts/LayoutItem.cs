@@ -1,4 +1,4 @@
-﻿/*
+/*
     Copyright (c) 2026 Alex Howe
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -13,7 +13,6 @@
 */
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Poke.UI
@@ -24,63 +23,115 @@ namespace Poke.UI
     ]
     public class LayoutItem : MonoBehaviour, ILayoutElement
     {
-        [SerializeField] protected bool m_log;
+        [SerializeField] protected bool             m_log;
+        [SerializeField] protected bool             m_ignoreLayout = false;
+        [SerializeField] protected SizeModes        m_sizing;
+        [SerializeField, Min(0)] protected float    m_minWidth;
+        [SerializeField] protected bool             m_useMinWidth;
+        [SerializeField, Min(0)] protected float    m_minHeight;
+        [SerializeField] protected bool             m_useMinHeight;
+        [SerializeField, Min(0)] protected float    m_maxWidth;
+        [SerializeField] protected bool             m_useMaxWidth;
+        [SerializeField, Min(0)] protected float    m_maxHeight;
+        [SerializeField] protected bool             m_useMaxHeight;
+        [SerializeField] protected float            m_flexWidth = 1;
+        [SerializeField] protected float            m_flexHeight = 1;
+        [SerializeField] protected Margins          m_margins;
         
-        [Header("Layout Item")]
-        [SerializeField] protected bool m_ignoreLayout = false;
-        [SerializeField] protected SizeModes m_sizing;
+        public float minWidth => m_minWidth;
+        public float minHeight => m_minHeight;
+        public float flexibleWidth => m_flexWidth; // relative "weight" of this item in the horizontal layout
+        public float flexibleHeight => m_flexHeight; // relative "weight" of this item in the vertical layout
+        public float preferredWidth => m_maxWidth;
+        public float preferredHeight => m_maxHeight;
+        public int layoutPriority => _layoutPriority; // useless in uLayout (bc only one UL component per object)
 
-        protected float _minWidth;
-        protected float _preferredWidth;
-        protected float _flexibleWidth;
-        protected float _minHeight;
-        protected float _preferredHeight;
-        protected float _flexibleHeight;
-        protected int _layoutPriority;
-
-        public float minWidth => _minWidth;
-        public float preferredWidth => _preferredWidth;
-        public float flexibleWidth => _flexibleWidth;
-        public float minHeight => _minHeight;
-        public float preferredHeight => _preferredHeight;
-        public float flexibleHeight => _flexibleHeight;
-        public int layoutPriority => _layoutPriority;
+        private float _preferredWidth, _preferredHeight;
+        private int _layoutPriority;
         
-        public bool IgnoreLayout {
+        #region Properties
+        public bool IgnoreLayout
+        {
             get => m_ignoreLayout;
-            set => m_ignoreLayout = value;
+            set {
+                m_ignoreLayout = value;
+                SetDirty();
+            }
         }
+        public Margins Margins
+        {
+            get => m_margins;
+            set {
+                m_margins = value;
+                SetDirty();
+            }
+        }
+
+        public bool UseMinWidth {
+            get => m_useMinWidth;
+            set {
+                m_useMinWidth = value;
+                SetDirty();
+            }
+        }
+
+        public bool UseMinHeight {
+            get => m_useMinHeight;
+            set {
+                m_useMinHeight = value;
+                SetDirty();
+            }
+        }
+        
+        public bool UseMaxWidth {
+            get => m_useMaxWidth;
+            set {
+                m_useMaxWidth = value;
+                SetDirty();
+            }
+        }
+        
+        public bool UseMaxHeight {
+            get => m_useMaxHeight;
+            set {
+                m_useMaxHeight = value;
+                SetDirty();
+            }
+        }
+        
         public RectTransform Rect => _rect;
-        public DrivenTransformProperties TrackerProps {
-            get => _trackerProps;
-            set => _trackerProps = value;
-        }
-        public SizeModes SizeMode => m_sizing;
+        public DrivenTransformProperties TrackerProps => _trackerProps;
+        public SizeModes Sizing => m_sizing;
+        #endregion
         
         protected RectTransform _rect;
         protected DrivenRectTransformTracker _tracker;
         protected DrivenTransformProperties _trackerProps;
-        protected RectTransform _parentRect;
         protected Layout _parent;
         protected bool _dirty = true;
         protected int _frame;
-        
+        protected readonly Vector3[] _rectCorners = new Vector3[4];
+
+        private RectTransform _parentRect;
         private Vector2 _parentSize;
-        
+        private Canvas _canvas;
+
         [Serializable]
-        public struct SizeModes
+        public struct SizeModes : IEquatable<SizeModes>
         {
             public SizingMode x;
             public SizingMode y;
+            
+            public bool Equals(SizeModes other) {
+                return x == other.x && y == other.y;
+            }
         }
 
         #region LayoutItem MonoBehavior
         protected virtual void Awake() {
-            Log("awake");
-            
             _rect = GetComponent<RectTransform>();
             _tracker = new DrivenRectTransformTracker();
-            
+
             _parentSize = _parentRect ? _parentRect.rect.size : default;
         }
 
@@ -89,7 +140,10 @@ namespace Poke.UI
                 _parentRect = transform.parent.GetComponent<RectTransform>();
                 _parent = transform.parent.GetComponent<Layout>();
             }
+            else { Debug.LogError("LayoutItem must be a child of a RectTransform!"); }
 
+            _canvas = GetComponentInParent<Canvas>();
+            
             _trackerProps = DrivenTransformProperties.None;
             _dirty = true;
         }
@@ -97,16 +151,16 @@ namespace Poke.UI
         public virtual void Update() {
             //Log("update");
             _frame = Time.frameCount;
-            
-            #if UNITY_EDITOR
+
+#if UNITY_EDITOR
             _tracker.Clear();
             _trackerProps = DrivenTransformProperties.None;
-            
+
             SetDrivenProperties();
-            
+
             _tracker.Add(this, _rect, _trackerProps);
-            #endif
-            
+#endif
+
             // Do grow sizing here if parent is not a Layout
             if(!_parent && _parentRect) {
                 // only update size if parent size has changed
@@ -118,6 +172,25 @@ namespace Poke.UI
                     _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _parentRect.rect.size.y);
                     _parentSize = _parentSize.SetY(_parentRect.rect.size.y);
                 }
+            }
+        }
+        
+        protected virtual void OnDrawGizmosSelected() {
+            _rect.GetWorldCorners(_rectCorners);
+
+            Matrix4x4 ltw = _rect.localToWorldMatrix;
+            
+            foreach(Vector3 v in _rectCorners) {
+                LayoutUtil.DrawCenteredDebugBox(v, 8f * _canvas.transform.localScale.x, 8f * _canvas.transform.localScale.y, Color.red);
+            }
+
+            Rect r = new Rect(_rectCorners[0], _rectCorners[2] - _rectCorners[0]);
+            LayoutUtil.DrawDebugBox(r, _rect.position.z, Color.white);
+
+            if(m_margins.top != 0 || m_margins.bottom != 0 || m_margins.left != 0 || m_margins.right != 0) {
+                r.position -= (Vector2)(ltw * new Vector2(m_margins.left, m_margins.bottom));
+                r.size += (Vector2)(ltw * new Vector2(m_margins.left + m_margins.right, m_margins.top + m_margins.bottom));
+                LayoutUtil.DrawDebugBox(r, _rect.position.z, Color.orange);
             }
         }
         #endregion
@@ -132,9 +205,8 @@ namespace Poke.UI
             if((m_sizing.y == SizingMode.FitContent && transform.childCount > 0) || m_sizing.y == SizingMode.Grow)
                 _trackerProps |= DrivenTransformProperties.SizeDeltaY;
 
-            if(_parent && !m_ignoreLayout) {
+            if(_parent && !m_ignoreLayout) 
                 _trackerProps |= DrivenTransformProperties.AnchoredPosition | DrivenTransformProperties.Anchors;
-            }
         }
 
         public virtual void SetDirty() {
@@ -145,10 +217,11 @@ namespace Poke.UI
         }
 
         public virtual void CalculateLayoutInputHorizontal() {
-            Log("CalculateLayoutInputHorizontal");
+            Log("<color=white>CalculateLayoutInputHorizontal</color>");
         }
+
         public virtual void CalculateLayoutInputVertical() {
-            Log("CalculateLayoutInputVertical");
+            Log("<color=white>CalculateLayoutInputVertical</color>");
         }
     }
 }

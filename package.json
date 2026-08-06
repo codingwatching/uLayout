@@ -1,9 +1,11 @@
 {
   "name": "com.pokeblokdude.ulayout",
   "displayName": "uLayout",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "A simple UI layout library for uGUI.",
-  "dependencies": {},
+  "dependencies": {
+    "com.unity.ugui": "0.0.1"
+  },
   "homepage": "https://github.com/pokeblokdude/uLayout",
   "bugs": {
     "url": "https://github.com/pokeblokdude/uLayout/issues"
@@ -13,7 +15,9 @@
     "url": "git@github.com:pokeblokdude/uLayout.git"
   },
   "license": "MIT",
-  "author": "pokeblokdude",
+  "author": {
+    "name": "pokeblokdude"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

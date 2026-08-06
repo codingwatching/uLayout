@@ -1,4 +1,26 @@
-﻿## [1.6.4] - 2026-06-26
+﻿## [1.7.0] - 2026-08-06
+
+### Added
+- `Layout`
+  - Added `Overflow Wrap` parameter!
+    - Should behave very similar to `flex-wrap` CSS property, where overflowing items are automatically moved to a new line/column
+    - Works with all layout directions, justify/align-content combos, as well as `FitContent` and `Grow` SizingModes
+    - shoutout to @BeytullahKalay for getting things started
+  - Added `Line Spacing` parameter for use in conjunction with wrap
+  - Added `Align Items` parameter to control the cross-axis alignment of elements within their respective lines
+- Integrated public properties for `UnityEngine.UI.ILayoutElement` in `LayoutItem`: min/preferred/flexible width/height, which were previously unused
+  - "preferred" properties return uLayout's max width/height values
+  - In theory this means better compatibility with uGUI's built-in layout components, but also I haven't tested lol
+
+### Changed
+- Fully redesigned custom editors for `LayoutItem`, `Layout`, and `LayoutText` using UI Toolkit -- should be much more intuitive to work with :)
+  - Unity versions prior to 6000.0 will fallback to IMGUI editors -- submit an issue if you encounter any bugs or parity issues!
+- `AlignContent` no longer controls the in-line, cross-axis position of individual items, rather positioning lines/columns as a whole (see `Align Items` for more)
+
+### Fixed
+- Added missing package dependency for `com.unity.ugui` (shoutout @j-tucc)
+
+## [1.6.4] - 2026-06-26
 
 ### Added
 - Added `OnLayoutChanged` event to `Layout`, which is useful for waiting for the layout to complete before showing procedural content
