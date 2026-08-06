@@ -12,6 +12,7 @@
                 <ui:Toggle label="Ignore Child Scale" name="IgnoreScaleField"/>
                 <ui:Toggle label="Overflow Wrap" name="WrapField"/>
                 <ui:FloatField label="Line Spacing" value="0" name="LineSpacingField"/>
+                <ui:EnumField label="Align Items" value="Center" type="Poke.UI.Layout+Alignment, uLayout" name="AlignItemsField" tooltip="Alignment of items within their respective lines"/>
                 <ui:VisualElement style="flex-grow: 1; background-color: rgba(255, 255, 255, 0.051); margin-left: 3px; margin-top: 6px; margin-right: 3px; margin-bottom: 3px; padding-top: 4px; padding-left: 4px; padding-bottom: 4px; padding-right: 1px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;">
                     <ui:Label text="Label" name="InfoLabel" enabled="false" style="white-space: normal; padding-left: 2px;"/>
                     <ui:Button text="Refresh Child Cache" name="RefreshCacheButton" style="margin-left: 0; margin-right: 3px; margin-top: 3px;"/>

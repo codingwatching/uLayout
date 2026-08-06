@@ -38,7 +38,7 @@ namespace Poke.UI
         private SerializedProperty _ignoreChildScale;
         private SerializedProperty _wrap;
         private SerializedProperty _lineSpacing;
-        private SerializedProperty _sizing;
+        private SerializedProperty _alignItems;
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -52,7 +52,7 @@ namespace Poke.UI
             _ignoreChildScale = serializedObject.FindProperty("m_ignoreChildScale");
             _wrap = serializedObject.FindProperty("m_wrap");
             _lineSpacing = serializedObject.FindProperty("m_lineSpacing");
-            _sizing = serializedObject.FindProperty("m_sizing");
+            _alignItems = serializedObject.FindProperty("m_alignItems");
         }
         
 #if UNITY_6000_0_OR_NEWER
@@ -82,6 +82,9 @@ namespace Poke.UI
                 innerSpacing.SetEnabled((Layout.Justification)prop.enumValueIndex != Layout.Justification.SpaceBetween);
             });
 
+            Toggle ignoreScale = root.Q<Toggle>("IgnoreScaleField");
+            ignoreScale.BindProperty(_ignoreChildScale);
+            
             Toggle wrap = root.Q<Toggle>("WrapField");
             wrap.BindProperty(_wrap);
 
@@ -90,6 +93,9 @@ namespace Poke.UI
             lineSpacing.SetEnabled(_wrap.boolValue);
             lineSpacing.TrackPropertyValue(_wrap, prop => lineSpacing.SetEnabled(prop.boolValue));
 
+            EnumField alignItems = root.Q<EnumField>("AlignItemsField");
+            alignItems.BindProperty(_alignItems);
+            
             Label info = root.Q<Label>("InfoLabel");
             info.text = $"Tracking {_layout.ChildCount} layout elements.\nHorizontal Grow: {_layout.GrowChildCount.x}, Vertical Grow: {_layout.GrowChildCount.y}";
             info.TrackSerializedObjectValue(serializedObject, obj => {
