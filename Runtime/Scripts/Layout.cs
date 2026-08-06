@@ -127,7 +127,6 @@ namespace Poke.UI
         private Vector2                     _lastSize;
         private readonly List<LineInfo>     _lines = new();
         private bool                        _precalcYSize;
-        private bool                        _deferredH;
         
         #region TypeDef
         public enum Justification
@@ -294,7 +293,6 @@ namespace Poke.UI
             _ignoreCount = 0;
             _innerSize = Vector2.zero;
             _precalcYSize = false;
-            _deferredH = false;
             
             // get number of disabled/ignore children
             foreach(ChildInfo c in _children) {
@@ -473,15 +471,12 @@ namespace Poke.UI
             
             if(m_wrap && _lines.Count > 0) {
                 if(IsRowDirection()) {
-                    GrowChildrenHorizontalWrapped();
+                    GrowChildrenHorizontalWrapped(_contentSize.x);
                     foreach(LineInfo line in _lines) {
                         HorizontalLayout(line.firstItemIdx, line.lastItemIdx, line.primarySize, line.ignoreCount);
                     }
                 }
-                else {
-                    // vertical wrap requires calculating vertical sizes BEFORE horizontal layout
-                    _deferredH = true;
-                }
+                // vertical wrap requires calculating vertical sizes BEFORE horizontal layout
             }
             else {
                 GrowChildrenHorizontal();
@@ -495,7 +490,7 @@ namespace Poke.UI
             Log("<color=white>SetLayoutVertical</color>");
             
             if(m_wrap && _lines.Count > 0) {
-                GrowChildrenVerticalWrapped();
+                GrowChildrenVerticalWrapped(_contentSize.y);
                 if(IsRowDirection()) {
                     float offset = 0;
                     foreach(LineInfo line in _lines) {
@@ -508,7 +503,7 @@ namespace Poke.UI
                         VerticalLayout(line.firstItemIdx, line.lastItemIdx, line.primarySize, line.ignoreCount);
                     }
                     
-                    GrowChildrenHorizontalWrapped();
+                    GrowChildrenHorizontalWrapped(_contentSize.x);
                     
                     float offset = 0;
                     foreach(LineInfo line in _lines) {
@@ -868,7 +863,7 @@ namespace Poke.UI
 
                                 float pivot = c.size.y * c.rect.pivot.y;
                                 offset -= c.size.y - pivot + c.margins.top;
-                                c.rect.anchoredPosition = c.rect.anchoredPosition.SetY(offset - m_padding.top);
+                                c.rect.anchoredPosition = c.rect.anchoredPosition.SetY(offset);
                                 offset -= pivot + c.margins.bottom + m_innerSpacing;
                             }
                             break;
@@ -1418,70 +1413,187 @@ namespace Poke.UI
             // TODO: fit content X
         }
         
-        private void GrowChildrenHorizontalWrapped() {
+        private void GrowChildrenHorizontalWrapped(float contentWidth) {
             Log("<color=white>GrowChildrenHorizontalWrapped</color>");
             switch(m_direction) {
                 case LayoutDirection.Row:
                 case LayoutDirection.RowReverse:
+                    foreach(ChildInfo c in _children) {
+                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.x != SizingMode.Grow)
+                            continue;
+                        
+                        float size = _rect.rect.size.x - m_padding.left - m_padding.right - c.margins.left - c.margins.right;
+                        if(c.li.UseMaxWidth) size = Mathf.Min(c.li.preferredWidth, size);
+                        if(c.li.UseMaxWidth) size = Mathf.Max(c.li.minWidth, size);
+                        
+                        Log($"growing \"{c.li.name}\" y axis ({size})");
+                        c.size.x = size;
+                        
+                        // update line size
+                        LineInfo line = _lines[c.lineIndex];
+                        line.primarySize = size + c.margins.left + c.margins.right;
+                        _lines[c.lineIndex] = line;
+
+                        // size actually needs to change
+                        if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
+                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
+                        }
+                    }
                     break;
                 case LayoutDirection.Column:
                 case LayoutDirection.ColumnReverse:
+                    float leftover = _rect.rect.size.x - m_padding.left - m_padding.right - contentWidth;
+                    
+                    // get flex heights sum
+                    float flexTotal = 0;
+                    foreach(LineInfo line in _lines) {
+                        if(line.itemCount > 1)
+                            continue;
+
+                        ChildInfo c = _children[line.firstItemIdx];
+                        if(CheckIgnoreElem(c) || c.sizingX != SizingMode.Grow)
+                            continue;
+
+                        flexTotal += c.li.flexibleWidth;
+                    }
+                    
+                    for(int l = 0; l < _lines.Count; l++) {
+                        LineInfo line = _lines[l];
+                        
+                        if(line.itemCount > 1) {
+                            for(int i = line.firstItemIdx; i <= line.lastItemIdx; i++) {
+                                ChildInfo c = _children[i];
+                                
+                                if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.x != SizingMode.Grow)
+                                    continue;
+
+                                Log($"line width: {line.crossSize}");
+                                
+                                float size = line.crossSize - c.margins.left - c.margins.right;
+                                if(c.li.UseMaxWidth) size = Mathf.Min(c.li.preferredWidth, size);
+                                if(c.li.UseMinWidth) size = Mathf.Max(c.li.minWidth, size);
+                                
+                                Log($"growing \"{c.li.name}\" x axis ({size})");
+
+                                // size actually needs to change
+                                if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
+                                    c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
+                                }
+                            }
+                        }
+                        else {
+                            ChildInfo c = _children[line.firstItemIdx];
+                            if(CheckIgnoreElem(c) || c.sizingX != SizingMode.Grow)
+                                continue;
+
+                            float size = leftover * (c.li.flexibleWidth / flexTotal) - c.margins.left - c.margins.right;
+                            if(c.li.UseMaxWidth) size = Mathf.Min(c.li.preferredWidth, size);
+                            if(c.li.UseMaxWidth) size = Mathf.Max(c.li.minWidth, size);
+                            
+                            line.crossSize = size + c.margins.left + c.margins.right;
+                            _lines[l] = line;
+                            _contentSize.x += size + c.margins.left + c.margins.right;
+                            
+                            Log($"growing \"{c.li.name}\" x axis ({size})");
+                            
+                            // size actually needs to change
+                            if(!Mathf.Approximately(c.rect.rect.size.x, size)) {
+                                c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size);
+                            }
+                        }
+                    }
                     break;
             }
         }
 
-        private void GrowChildrenVerticalWrapped() {
+        private void GrowChildrenVerticalWrapped(float contentHeight) {
             Log("<color=white>GrowChildrenVerticalWrapped</color>");
             
             float size;
-            float flexTotal = 0;
             
             switch(m_direction) {
                 // GROW VERTICAL --> CROSS AXIS
                 case LayoutDirection.Row:
                 case LayoutDirection.RowReverse:
-                    foreach(ChildInfo c in _children) {
-                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
+                    float leftover = _rect.rect.size.y - m_padding.top - m_padding.bottom - contentHeight;
+                    
+                    // get flex heights sum
+                    float flexTotal = 0;
+                    foreach(LineInfo line in _lines) {
+                        if(line.itemCount > 1)
                             continue;
 
-                        LineInfo line = _lines[c.lineIndex];
-                        Log($"line height: {line.crossSize}");
-                        size = line.crossSize - c.margins.top - c.margins.bottom;
-                        if(c.li.UseMaxHeight) size = Mathf.Min(c.li.preferredHeight, size);
-                        if(c.li.UseMinHeight) size = Mathf.Max(c.li.minHeight, size);
-                        
-                        Log($"growing \"{c.li.name}\" y axis ({size})");
+                        ChildInfo c = _children[line.firstItemIdx];
+                        if(CheckIgnoreElem(c) || c.sizingY != SizingMode.Grow)
+                            continue;
 
-                        // size actually needs to change
-                        if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
-                            c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+                        flexTotal += c.li.flexibleHeight;
+                    }
+                    
+                    for(int l = 0; l < _lines.Count; l++) {
+                        LineInfo line = _lines[l];
+                        
+                        if(line.itemCount > 1) {
+                            for(int i = line.firstItemIdx; i <= line.lastItemIdx; i++) {
+                                ChildInfo c = _children[i];
+                                
+                                if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
+                                    continue;
+
+                                Log($"line height: {line.crossSize}");
+                                
+                                size = line.crossSize - c.margins.top - c.margins.bottom;
+                                if(c.li.UseMaxHeight) size = Mathf.Min(c.li.preferredHeight, size);
+                                if(c.li.UseMinHeight) size = Mathf.Max(c.li.minHeight, size);
+                                
+                                Log($"growing \"{c.li.name}\" y axis ({size})");
+
+                                // size actually needs to change
+                                if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
+                                    c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+                                }
+                            }
+                        }
+                        else {
+                            ChildInfo c = _children[line.firstItemIdx];
+                            if(CheckIgnoreElem(c) || c.sizingY != SizingMode.Grow)
+                                continue;
+
+                            size = leftover * (c.li.flexibleHeight / flexTotal) - c.margins.top - c.margins.bottom;
+                            if(c.li.UseMaxHeight) size = Mathf.Min(c.li.preferredHeight, size);
+                            if(c.li.UseMinHeight) size = Mathf.Max(c.li.minHeight, size);
+                            
+                            line.crossSize = size + c.margins.top + c.margins.bottom;
+                            _lines[l] = line;
+                            _contentSize.y += size + c.margins.top + c.margins.bottom;
+                            
+                            Log($"growing \"{c.li.name}\" y axis ({size})");
+                            
+                            // size actually needs to change
+                            if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
+                                c.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size);
+                            }
                         }
                     }
                     break;
                 // GROW VERTICAL --> PRIMARY AXIS
                 case LayoutDirection.Column:
                 case LayoutDirection.ColumnReverse:
-                    // save total flex sum for size distribution
-                    foreach(ChildInfo c in _children) {
-                        if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
-                            continue;
-
-                        flexTotal += c.li.flexibleHeight;
-                    }
-                    
-                    float leftover = _rect.rect.size.y - _contentSize.y - m_padding.top - m_padding.bottom;
-                    
                     foreach(ChildInfo c in _children) {
                         if(!c.li || CheckIgnoreElem(c) || c.li.Sizing.y != SizingMode.Grow)
                             continue;
                         
-                        size = leftover * (c.li.flexibleHeight / flexTotal) - c.margins.top - c.margins.bottom;
+                        size = _rect.rect.size.y - m_padding.top - m_padding.bottom - c.margins.top - c.margins.bottom;
                         if(c.li.UseMaxHeight) size = Mathf.Min(c.li.preferredHeight, size);
                         if(c.li.UseMinHeight) size = Mathf.Max(c.li.minHeight, size);
                         
                         Log($"growing \"{c.li.name}\" y axis ({size})");
                         c.size.y = size;
-                        _contentSize.y += size + c.margins.top + c.margins.bottom;
+                        
+                        // update line size
+                        LineInfo line = _lines[c.lineIndex];
+                        line.primarySize = size + c.margins.top + c.margins.bottom;
+                        _lines[c.lineIndex] = line;
 
                         // size actually needs to change
                         if(!Mathf.Approximately(c.rect.rect.size.y, size)) {
