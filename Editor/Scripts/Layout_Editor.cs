@@ -139,20 +139,12 @@ namespace Poke.UI
 
             EditorGUILayout.PropertyField(_ignoreChildScale);
             
-            // _ignoreChildScale, _wrap and _lineSpacing are only relevant when at least
-            // one axis has a determined size (Fixed or Grow). When both axes are FitContent
-            // the container shrinks to its children and these settings have no effect.
-            SizingMode sizeX = (SizingMode)_sizing.FindPropertyRelative("x").enumValueIndex;
-            SizingMode sizeY = (SizingMode)_sizing.FindPropertyRelative("y").enumValueIndex;
-            bool hasDeterminedSize = sizeX == SizingMode.Fixed || sizeX == SizingMode.Grow
-                                  || sizeY == SizingMode.Fixed || sizeY == SizingMode.Grow;
-
-            if(hasDeterminedSize) {
-                EditorGUILayout.PropertyField(_wrap);
-                if((WrapMode)_wrap.enumValueIndex == WrapMode.Wrap) {
-                    EditorGUILayout.PropertyField(_lineSpacing);
-                }
+            EditorGUILayout.PropertyField(_wrap);
+            if(_wrap.boolValue) {
+                EditorGUILayout.PropertyField(_lineSpacing);
             }
+
+            EditorGUILayout.PropertyField(_alignItems);
 
             if(serializedObject.hasModifiedProperties) {
                 serializedObject.ApplyModifiedProperties();

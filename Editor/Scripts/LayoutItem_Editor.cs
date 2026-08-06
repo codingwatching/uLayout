@@ -24,14 +24,11 @@ namespace Poke.UI
     ]
     public class LayoutItem_Editor : Editor
     {
-#if UNITY_6000_0_OR_NEWER
-        public VisualTreeAsset layoutItem;
-        
         private LayoutItem _item;
 
         private SerializedProperty _log;
         private SerializedProperty _ignoreLayout;
-        private SerializedProperty _sizing;
+        protected SerializedProperty _sizing;
         private SerializedProperty _sizingX;
         private SerializedProperty _sizingY;
         private SerializedProperty _useMinWidth;
@@ -66,6 +63,9 @@ namespace Poke.UI
             _flexHieght = serializedObject.FindProperty("m_flexHeight");
             _margins = serializedObject.FindProperty("m_margins");
         }
+        
+#if UNITY_6000_0_OR_NEWER
+        public VisualTreeAsset layoutItem;
         
         public override VisualElement CreateInspectorGUI() {
             VisualElement root = new();
@@ -200,7 +200,17 @@ namespace Poke.UI
             EditorGUILayout.PropertyField(_sizing);
             GUI.enabled = true;
 
-            EditorGUILayout.PropertyField(_overflowsLineCross);
+            EditorGUILayout.PropertyField(_useMinWidth);
+            EditorGUILayout.PropertyField(_minWidth);
+            EditorGUILayout.PropertyField(_useMaxWidth);
+            EditorGUILayout.PropertyField(_maxWidth);
+            EditorGUILayout.PropertyField(_useMinHeight);
+            EditorGUILayout.PropertyField(_minHeight);
+            EditorGUILayout.PropertyField(_useMaxHeight);
+            EditorGUILayout.PropertyField(_maxHeight);
+            EditorGUILayout.PropertyField(_flexWidth);
+            EditorGUILayout.PropertyField(_flexHieght);
+            EditorGUILayout.PropertyField(_margins);
 
             if(serializedObject.hasModifiedProperties) {
                 serializedObject.ApplyModifiedProperties();

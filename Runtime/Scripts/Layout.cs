@@ -115,6 +115,13 @@ namespace Poke.UI
                 SetDirty();
             }
         }
+        public Alignment AlignItems {
+            get => m_alignItems;
+            set {
+                m_alignItems = value;
+                SetDirty();
+            }
+        }
         #endregion
 
         public int ChildCount => _children?.Count ?? 0;
