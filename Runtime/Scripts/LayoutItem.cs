@@ -116,6 +116,8 @@ namespace Poke.UI
         private Vector2 _parentSize;
         private Canvas _canvas;
 
+		private Canvas Canvas => _canvas ? _canvas : _canvas = GetComponentInParent<Canvas>();
+
         [Serializable]
         public struct SizeModes : IEquatable<SizeModes>
         {
@@ -130,6 +132,7 @@ namespace Poke.UI
         #region LayoutItem MonoBehavior
         protected virtual void Awake() {
             _rect = GetComponent<RectTransform>();
+            _canvas = GetComponentInParent<Canvas>();
             _tracker = new DrivenRectTransformTracker();
 
             _parentSize = _parentRect ? _parentRect.rect.size : default;
@@ -141,11 +144,11 @@ namespace Poke.UI
                 _parent = transform.parent.GetComponent<Layout>();
             }
             else { Debug.LogError("LayoutItem must be a child of a RectTransform!"); }
-
-            _canvas = GetComponentInParent<Canvas>();
             
             _trackerProps = DrivenTransformProperties.None;
-            _dirty = true;
+            
+			_dirty = true;
+			if(_parent) _parent.RefreshChildCache();
         }
 
         public virtual void Update() {
@@ -181,7 +184,7 @@ namespace Poke.UI
             Matrix4x4 ltw = _rect.localToWorldMatrix;
             
             foreach(Vector3 v in _rectCorners) {
-                LayoutUtil.DrawCenteredDebugBox(v, 8f * _canvas.transform.localScale.x, 8f * _canvas.transform.localScale.y, Color.red);
+                LayoutUtil.DrawCenteredDebugBox(v, 8f * Canvas.transform.localScale.x, 8f * Canvas.transform.localScale.y, Color.red);
             }
 
             Rect r = new Rect(_rectCorners[0], _rectCorners[2] - _rectCorners[0]);

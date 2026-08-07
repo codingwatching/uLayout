@@ -1,4 +1,12 @@
-﻿## [1.7.0] - 2026-08-06
+﻿## [1.7.1] - 2026-08-07
+
+### Fixed
+- Fixed canvas null reference in `LayoutItem` OnDrawGizmosSelected()
+- `LayoutItem` forces parent cache refresh on enable (if parent is `Layout`)
+- `Layout` sets parent dirty prior to layout change
+- `Layout` cache refresh sets itself and parent dirty
+
+## [1.7.0] - 2026-08-06
 
 ### Added
 - `Layout`

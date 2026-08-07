@@ -264,7 +264,7 @@ namespace Poke.UI
             }
 
             if(layoutChanged) {
-                _dirty = true;
+                SetDirty();
                 Log("marking for rebuild");
                 LayoutRebuilder.MarkLayoutForRebuild(_rect);
                 if(needsCacheRefresh)
@@ -1756,6 +1756,7 @@ namespace Poke.UI
                 );
             }
 
+			SetDirty();
             LayoutRebuilder.MarkLayoutForRebuild(_rect);
         }
     }
